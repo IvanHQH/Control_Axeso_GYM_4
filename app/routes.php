@@ -24,8 +24,8 @@ Route::get('unavailable_memberships_types', 'HomeController@unavailable_membersh
 Route::get('active_memberships', 'MembershipController@active_memberships');
 Route::get('inactive_memberships', 'MembershipController@inactive_memberships');
 Route::get('expiring_memberships', 'HomeController@expiring_memberships');
+Route::get('memberships_paymets', 'HomeController@memberships_paymets');
 Route::get('memberships_paymets', 'PaymentController@payments_list');
 Route::post('/payment/{memberId?}', 'PaymentController@store');
 Route::post('validate_membership', 'HomeController@validate_membership');
-
-
+Route::get('/check_notifications_axeso', 'HomeController@check_notifications');

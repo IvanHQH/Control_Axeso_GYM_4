@@ -75,13 +75,48 @@ class HomeController extends BaseController {
     public function validate_membership()
     {
         $input = Input::All();
-        $validate = DB::select('call validate_membership('.$input['code'].')'); 
-        if(count($validate) > 0)
-        {
-            $validate = $validate[0];
-            return Response::json($validate);
+        $nfc_tarjet = NfcTarjet::where('code', '=', $input['code'])->first();
+        if(!is_null($nfc_tarjet)){
+            $membership = Membership::where('id', '=', $nfc_tarjet->membership_id)->first();
+            if(!is_null($membership)){
+               $member = Member::where('id', '=', $membership->member_id)->first();
+               if(!is_null($member)){
+                  if($membership->active == 1){
+                      NotificationAxeso::where('band', 1)->update(['band' => 0]); 
+                      $notification_axeso = new NotificationAxeso();
+                      $notification_axeso->nfc_card = $input['code'];
+                      $notification_axeso->band = 1;
+                      $notification_axeso->save();
+                      $mensaje = 'Bienvenido'.' '.$member->first_name;
+                      return Response::json(array('message' => $mensaje));
+                  }
+                  if($membership->active == 0){
+                      return Response::json(array('message' => 'Axeso denegado, verifique el estado de su membresia'));
+                  }
+               }
+            }
         }
-        return Response::json(array('full_name' => 'null','active'=>'null'));
+       else{
+         return Response::json(array('message' => 'Axeso denegado, no hay membresias asociadas a esta tarjeta'));
+       }
     }
+
+ public function check_notifications(){
+   $notification_axeso = NotificationAxeso::whereBand(1)->first();
+   if(!is_null($notification_axeso)){
+      $notification_axeso->band = 0;
+      $notification_axeso->save();
+      $nfc_tarjet = NfcTarjet::where('code', '=', $notification_axeso->nfc_card)->first();
+      if(!is_null($nfc_tarjet)){
+         $membership = Membership::where('id', '=', $nfc_tarjet->membership_id)->first();
+         if(!is_null($membership)){
+            $member = Member::where('id', '=', $membership->member_id)->first();
+            if(!is_null($member)){
+               return Response::json($member);
+            }
+         }
+      }
+    }
+  }
     
 }

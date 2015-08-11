@@ -13,8 +13,6 @@
     
     {{-- Bootstrap --}}
     {{ HTML::style('assets/css/bootstrap.min.css', array('media' => 'screen')) }}
-    {{ HTML::style('assets/css/bootstrap-table.min.css', array('media' => 'screen')) }}
-    {{ HTML::style('assets/css/dashboard.css', array('media' => 'screen')) }}
     {{-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries --}}
 
     <!-- Bootstrap Core CSS -->
@@ -73,10 +71,10 @@
                     <ul class="dropdown-menu dropdown-user">
                         <li><a href="#"><i class="fa fa-user fa-fw"></i> Perfil de usuario</a>
                         </li>
-                        <li><a href="#"><i class="fa fa-gear fa-fw"></i> ConfiguraciÃ³n</a>
+                        <li><a href="#"><i class="fa fa-gear fa-fw"></i> Configuración</a>
                         </li>
                         <li class="divider"></li>
-                        <li><a href="login.html"><i class="fa fa-sign-out fa-fw"></i> Cerrar sesiÃ³n</a>
+                        <li><a href="login.html"><i class="fa fa-sign-out fa-fw"></i> Cerrar sesión</a>
                         </li>
                     </ul>
                     <!-- /.dropdown-user -->
@@ -117,7 +115,7 @@
                                     <a href="inactive_memberships">Membres&iacute;as inactivas</a>
                                 </li>                                
                                 <!--li>
-                                    <a href="expiring_memberships">MembresÃ­as a punto de expirar</a>
+                                    <a href="expiring_memberships">Membresías a punto de expirar</a>
                                 </li-->                                  
                             </ul>
                             <!-- /.nav-members-level -->
@@ -191,8 +189,6 @@
     {{-- Include all compiled plugins (below), or include individual files as needed --}}
     {{ HTML::script('assets/js/jquery.min.js') }}
     {{ HTML::script('assets/js/bootstrap.min.js') }}
-    {{ HTML::script('assets/js/bootstrap-table.js') }}
-    {{ HTML::script('assets/js/functions.js') }}
     <!-- jQuery -->
     {{ HTML::script('assets/bower_components/jquery/dist/jquery.min.js') }}
     <!-- Bootstrap Core JavaScript -->
@@ -202,12 +198,30 @@
     <!-- Morris Charts JavaScript -->
     {{ HTML::script('assets/bower_components/raphael/raphael-min.js') }}   
     {{ HTML::script('assets/bower_components/morrisjs/morris.min.js') }}
-    {{ HTML::script('assets/js/morris-data.js') }}
     <!-- DataTables JavaScript -->
     {{ HTML::script('assets/bower_components/datatables/media/js/jquery.dataTables.min.js') }}
     {{ HTML::script('assets/bower_components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.min.js') }}  
     <!-- Custom Theme JavaScript -->
     {{ HTML::script('assets/dist/js/sb-admin-2.js') }}
+
+<script>
+$(document).ready(
+    function checkNotifications()
+    {
+
+        $.ajax({
+                async: false,
+                type: 'get',
+                url: '{{ URL::to('/check_notifications_axeso') }}',
+                dataType: 'json',
+                success: function(data){
+                    alert("Bienvenido "+ data.first_name+'!!!');
+                }
+            });
+           setInterval(checkNotifications, 3000);
+    }
+    );
+</script>
 
 </body>
 </html>

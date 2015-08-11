@@ -88,7 +88,7 @@
                             <!-- /.headers-columns -->
                         </thead>
                         <tbody>
-                        @if(isset($membershipTypes))        
+                        @if(isset($membershipTypes))       
                         @foreach($membershipTypes as $memshipType) 
                             <tr class="gradeA odd" role="row">
                                 <td class="sorting_1">{{$memshipType->name}}</td>
