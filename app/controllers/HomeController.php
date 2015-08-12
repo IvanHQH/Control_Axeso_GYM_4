@@ -70,7 +70,12 @@ class HomeController extends BaseController {
     public function members_list()
     {
         return View::make('MembersList');
-    }                 
+    }                         
+    
+    public function quick_search()
+    {
+        return View::make('QuickSearch');
+    }      
     
     public function validate_membership()
     {
@@ -119,4 +124,5 @@ class HomeController extends BaseController {
     }
   }
     
+  
 }

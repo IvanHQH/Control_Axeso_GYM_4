@@ -71,10 +71,10 @@
                     <ul class="dropdown-menu dropdown-user">
                         <li><a href="#"><i class="fa fa-user fa-fw"></i> Perfil de usuario</a>
                         </li>
-                        <li><a href="#"><i class="fa fa-gear fa-fw"></i> Configuración</a>
+                        <li><a href="#"><i class="fa fa-gear fa-fw"></i> Configuraci&oacuate;n</a>
                         </li>
                         <li class="divider"></li>
-                        <li><a href="login.html"><i class="fa fa-sign-out fa-fw"></i> Cerrar sesión</a>
+                        <li><a href="login.html"><i class="fa fa-sign-out fa-fw"></i> Cerrar sesiï¿½n</a>
                         </li>
                     </ul>
                     <!-- /.dropdown-user -->
@@ -100,7 +100,7 @@
                             <!-- /input-group -->
                         </li>
                         <li>
-                            <a href="/"><i class="fa fa-user fa-fw"></i> Busqueda r&aacute;pida</a>
+                            <a href="quick_search"><i class="fa fa-user fa-fw"></i> Busqueda r&aacute;pida</a>
                         </li>
                         <li>
                             <a href="#"><i class="fa fa-users fa-fw"></i> Socios<span class="fa arrow"></span></a>
@@ -114,9 +114,9 @@
                                 <li>
                                     <a href="inactive_memberships">Membres&iacute;as inactivas</a>
                                 </li>                                
-                                <!--li>
-                                    <a href="expiring_memberships">Membresías a punto de expirar</a>
-                                </li-->                                  
+                                <li>
+                                    <a href="expiring_memberships">Membres&iacute;as a punto de expirar</a>
+                                </li>                                  
                             </ul>
                             <!-- /.nav-members-level -->
                         </li>
@@ -126,28 +126,28 @@
                                 <li>
                                     <a href="membership_types_list">Listado</a>
                                 </li>
-                                <!--li>
+                                <li>
                                     <a href="available_memberships_types">Tipos Disponibles</a>
                                 </li>
                                 <li>
                                     <a href="unavailable_memberships_types">Tipos No Disponibles</a>
-                                </li-->                            
+                                </li>                            
                                 <li>
                                     <a href="memberships_paymets">Pagos</a>
                                 </li>                                 
                             </ul>
                             <!-- /.nav-memberships-level -->
                         </li>    
-                        <!--li>
+                        <li>
                             <a href="#"><i class="fa fa-ticket fa-fw"></i> Visitas<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li>
-                                    <a href="visits_list">Listado</a>
+                                    <a href="visitors_list">Listado</a>
                                 </li>                               
                             </ul>
                             <!-- /.nav-memberships-level -->
-                        <!--/li-->        
-                        <!--li>
+                        </li>        
+                        <li>
                             <a href="#"><i class="fa fa-dollar fa-fw"></i> Caja<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li>
@@ -164,7 +164,7 @@
                                 </li>                                                      
                             </ul>
                             <!-- /.nav-memberships-level -->
-                        <!--/li-->                          
+                        </li>                          
                     </ul>
                 </div>
                 <!-- /.sidebar-collapse -->
