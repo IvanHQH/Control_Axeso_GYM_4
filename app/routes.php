@@ -18,6 +18,15 @@
 */
 
 Route::get('members_list', 'MemberController@members_list');
+Route::get('member/info_payment_wizard/{id}', 'MemberController@info_payment_wizard');
+Route::get('member/info_membership_wizard/{id}', 'MemberController@info_membership_wizard');
+Route::post('member/{memberId?}','MemberController@store');
+Route::delete('member/{memberId}','MemberController@delete');
+Route::get('member/{memberId}','MemberController@get');
+//Route::post('member/delete/{memberId?}','MemberController@delete');
+/*Route::post('member//{memberId?}', function () {
+    echo "ok";die();
+});*/
 
 /*
 |------------------------------------------------------------------------
@@ -25,9 +34,17 @@ Route::get('members_list', 'MemberController@members_list');
 |------------------------------------------------------------------------
 */
 
-Route::get('membership_types_list', 'MembershipTypeController@membership_types_list');
 Route::get('active_memberships', 'MembershipController@active_memberships');
 Route::get('inactive_memberships', 'MembershipController@inactive_memberships');
+Route::post('/membership/{memberId?}', 'MembershipController@store');
+
+/*
+|------------------------------------------------------------------------
+| Routes MembershipTypes
+|------------------------------------------------------------------------
+*/
+
+Route::get('membership_types_list', 'MembershipTypeController@membership_types_list');
 
 /*
 |------------------------------------------------------------------------
@@ -47,7 +64,6 @@ Route::post('/payment/{memberId?}', 'PaymentController@store');
 Route::post('validate_membership', 'HomeController@validate_membership');
 Route::get('/check_notifications_axeso', 'HomeController@check_notifications');
 Route::get('expiring_memberships', 'HomeController@expiring_memberships');
-Route::get('memberships_paymets', 'HomeController@memberships_paymets');
 Route::get('test', 'HomeController@test');
 Route::get('available_memberships_types', 'HomeController@available_memberships_types');
 Route::get('unavailable_memberships_types', 'HomeController@unavailable_memberships_types');
@@ -60,7 +76,7 @@ Route::get('quick_search', 'HomeController@quick_search');
 */
 
 Route::get('/', function(){
-    return View::make('login');
+    return View::make('login.login');
 });
 
 /*
@@ -70,7 +86,7 @@ Route::get('/', function(){
 */
 
 Route::get('/visitors_list', function(){
-	return View::make('visitors_list');
+	return View::make('visitors.visitors_list');
 });
 
 /*
@@ -80,18 +96,44 @@ Route::get('/visitors_list', function(){
 */
 
 Route::get('/incomes', function(){
-	return View::make('income');
+	return View::make('cashbox.income');
 });
 
 Route::get('/turner_cash', function(){
-	return View::make('cash_out');
+	return View::make('cashbox.cash_out');
 });
 
 Route::get('/outcomes', function(){
-	return View::make('expenses');
+	return View::make('cashbox.expenses');
 });
 
 Route::get('/settings_turner_cash', function(){
-	return View::make('adjustments');
+	return View::make('cashbox.adjustments');
 });
 
+/*
+|-------------------------------------------------------------------------
+| Routes test
+|-------------------------------------------------------------------------
+*/
+
+Route::get('/test', function(){
+    /*$payments = DB::select('call payments()');
+    foreach($payments as $payment) {
+    }  */
+        $memberId = 10;
+        if($memberId == 0)
+            $member = new Member();    
+        else{
+            $member = Member::find($memberId); 
+            if($member == null){
+                return Response::json(
+                        array('succes'=>false,'errors'=>'member not found')
+                );                
+            }else{
+                return Response::json(
+                        array('succes'=>true)
+                );                  
+            }                
+        }       
+});

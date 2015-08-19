@@ -11,14 +11,12 @@
  *
  * @author Arellano
  */
-class PaymentController extends BaseController{
+class VisitorController extends BaseController{
     //put your code here
 	 
-    public function payments_list()
+    public function visitors_list()
     {
-        //payments
-        $payments = DB::select('call payments()');         
-        return View::make('paymets.memberships_paymets',['payments'=>$payments]);         
+        return View::make('visitors.visitors_list',['payments'=>$payments]);         
     }    
     
     /**
@@ -39,7 +37,7 @@ class PaymentController extends BaseController{
            $payment->amount = $input['amount'];
            $payment->concept = $input['concept'];
            $payment->method_payment = $input['method_payment'];                       
-           $payment->save();            
+           $payment->save();       
             
            $membership = Membership::where('member_id',$input['memberId'])->get();
            if(count($membership) > 0){

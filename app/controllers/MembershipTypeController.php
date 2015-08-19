@@ -17,6 +17,12 @@ class MembershipTypeController extends BaseController {
     public function membership_types_list()
     {
         $membershipTypes = MembershipType::all();
-        return View::make('MembershipTypesList',['membershipTypes'=>$membershipTypes]);         
+        return View::make('membership_types.membership_types_list',['membershipTypes'=>$membershipTypes]);         
     }    
+    
+    public function get_membership_types()
+    {
+        return MembershipType::all();
+    }
+    
 }

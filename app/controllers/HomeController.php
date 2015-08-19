@@ -14,13 +14,6 @@ class HomeController extends BaseController {
     |	Route::get('/', 'HomeController@showWelcome');
     |
     */
-
-    public function test()
-    {
-        $members = Member::all();
-        echo $members[0]->name;
-        die();
-    }
     
     public function showWelcome()
     {
@@ -29,52 +22,47 @@ class HomeController extends BaseController {
 
     public function memberships_types_list()
     {
-        return View::make('MembershipTypesList'); 
+        return View::make('membership_types.membership_typesList'); 
     }
 
     public function available_memberships_types()
     {
-        return View::make('AvailableMembershipsTypes');             
+        return View::make('membership_types.available_memberships_types');             
     }
 
     public function unavailable_memberships_types()
     {
-        return View::make('UnavailableMembershipsTypes');             
+        return View::make('membership_types.unavailable_memberships_types');             
     }
 
     public function active_memberships()
     {
-        return View::make('ActiveMemberships');             
+        return View::make('memberships.active_memberships');             
     }        
 
     public function inactive_memberships()
     {
-        return View::make('InactiveMemberships');             
+        return View::make('memberships.inactive_memberships');             
     }    
 
     public function expiring_memberships()
     {
-        return View::make('ExpiringMemberships');             
-    }    
-
-    public function memberships_sold()
-    {
-        return View::make('MembershipsSold');             
-    }    
+        return View::make('memberships.expiring_memberships');             
+    }     
 
     public function memberships_paymets()
     {
-        return View::make('MembershipsPaymets');             
+        return View::make('paymets.memberships_paymets');             
     }    
     
     public function members_list()
     {
-        return View::make('MembersList');
+        return View::make('members.members_list');
     }                         
     
     public function quick_search()
     {
-        return View::make('QuickSearch');
+        return View::make('quick_search.quick_search');
     }      
     
     public function validate_membership()
@@ -106,23 +94,24 @@ class HomeController extends BaseController {
        }
     }
 
- public function check_notifications(){
-   $notification_axeso = NotificationAxeso::whereBand(1)->first();
-   if(!is_null($notification_axeso)){
-      $notification_axeso->band = 0;
-      $notification_axeso->save();
-      $nfc_tarjet = NfcTarjet::where('code', '=', $notification_axeso->nfc_card)->first();
-      if(!is_null($nfc_tarjet)){
-         $membership = Membership::where('id', '=', $nfc_tarjet->membership_id)->first();
-         if(!is_null($membership)){
-            $member = Member::where('id', '=', $membership->member_id)->first();
-            if(!is_null($member)){
-               return Response::json($member);
-            }
-         }
-      }
+    public function check_notifications()
+    {
+        $notification_axeso = NotificationAxeso::whereBand(1)->first();
+        if(!is_null($notification_axeso)){
+           $notification_axeso->band = 0;
+           $notification_axeso->save();
+           $nfc_tarjet = NfcTarjet::where('code', '=', $notification_axeso->nfc_card)->first();
+           if(!is_null($nfc_tarjet)){
+              $membership = Membership::where('id', '=', $nfc_tarjet->membership_id)->first();
+              if(!is_null($membership)){
+                 $member = Member::where('id', '=', $membership->member_id)->first();
+                 if(!is_null($member)){
+                    return Response::json($member);
+                }
+             }
+          }
+        }
     }
-  }
     
   
 }
