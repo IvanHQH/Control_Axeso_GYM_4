@@ -57,36 +57,39 @@
                                 aria-controls="dataTables-example" rowspan="1" colspan="1" 
                                 aria-sort="ascending" 
                                 aria-label="Rendering engine: activate to sort column descending" 
-                                style="width: 172px;">Nombre
+                                style="width: 250px;">Nombre
                                 </th>
                                 <th class="sorting" tabindex="0" aria-controls="dataTables-example" 
                                 rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending" 
-                                style="width: 204px;">Fecha Creada
-                                </th>
-                                <th class="sorting" tabindex="0" aria-controls="dataTables-example" 
-                                rowspan="1" colspan="1" aria-label="Platform(s): activate to sort column ascending" 
-                                style="width: 185px;">Creada Por
+                                style="width: 150px;">Fecha Creada
                                 </th>
                                 <th class="sorting" tabindex="0" aria-controls="dataTables-example" rowspan="1" 
                                 colspan="1" aria-label="Engine version: activate to sort column ascending" 
                                 style="width: 149px;">Precio
-                                </th><th class="sorting" tabindex="0" aria-controls="dataTables-example" 
+                                </th>
+                                <th class="sorting" tabindex="0" aria-controls="dataTables-example" 
                                 rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending" 
                                 style="width: 110px;">Duración
                                 </th>
+                                <th class="sorting" tabindex="0" aria-controls="dataTables-example" 
+                                rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending" 
+                                style="width: 110px;">Habilitada hasta
+                                </th>                                
                             </tr>
                             <!-- /.headers-columns -->
                         </thead>
-                        <tbody>
-                        @for($i = 0; $i < 6 ;$i++) 
+                        <tbody>                       
+                        @if(isset($membershipTypesAvailabes))       
+                        @foreach($membershipTypesAvailabes as $memshipType) 
                             <tr class="gradeA odd" role="row">
-                                <td class="sorting_1">Membresia {{$i+1}}</td>
-                                <td>25/Jun/2015</td>
-                                <td>Usuario</td>
-                                <td class="center">$1200</td>
-                                <td class="center">60 días</td>
-                            </tr>
-                        @endfor                             
+                                <td class="sorting_1">{{$memshipType->name}}</td>
+                                <td>{{$memshipType->created_at}}</td>
+                                <td class="center">{{$memshipType->price}}</td>
+                                <td class="center">{{$memshipType->duration}}</td>
+                                <td>{{$memshipType->available_until}}</td>
+                            </tr>                                                
+                        @endforeach
+                        @endif
                         </tbody>
                     </table></div>
                         </div>

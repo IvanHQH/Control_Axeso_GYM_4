@@ -25,7 +25,7 @@ class HomeController extends BaseController {
         return View::make('membership_types.membership_typesList'); 
     }
 
-    public function available_memberships_types()
+    /*public function available_memberships_types()
     {
         return View::make('membership_types.available_memberships_types');             
     }
@@ -33,7 +33,7 @@ class HomeController extends BaseController {
     public function unavailable_memberships_types()
     {
         return View::make('membership_types.unavailable_memberships_types');             
-    }
+    }*/
 
     public function active_memberships()
     {

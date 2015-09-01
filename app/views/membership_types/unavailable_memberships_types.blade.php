@@ -78,15 +78,17 @@
                             <!-- /.headers-columns -->
                         </thead>
                         <tbody>
-                        @for($i = 0; $i < 2 ;$i++) 
+                        @if(isset($membershipTypesUnavailabes))       
+                        @foreach($membershipTypesUnavailabes as $memshipType) 
                             <tr class="gradeA odd" role="row">
-                                <td class="sorting_1">Membresia {{$i+7}}</td>
-                                <td>25/Jun/2015</td>
-                                <td>Usuario</td>
-                                <td class="center">$1200</td>
-                                <td class="center">60 días</td>
-                            </tr>
-                        @endfor     
+                                <td class="sorting_1">{{$memshipType->name}}</td>
+                                <td>{{$memshipType->created_at}}</td>
+                                <td class="center">{{$memshipType->price}}</td>
+                                <td class="center">{{$memshipType->duration}}</td>
+                                <td>{{$memshipType->available_until}}</td>
+                            </tr>                                                
+                        @endforeach
+                        @endif  
                         </tbody>
                     </table></div>
                         </div>

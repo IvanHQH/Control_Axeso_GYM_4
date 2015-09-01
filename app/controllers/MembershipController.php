@@ -16,7 +16,7 @@ class MembershipController extends BaseController{
 	 
     public function active_memberships()
     {
-        $memberships = DB::select('call active_member_ships('.true.')'); 
+        $memberships = DB::select('call active_member_ships('.true.',1)'); 
         return View::make('memberships.active_memberships',['activeMemberships'=>$memberships]);
     }    
     
@@ -38,9 +38,12 @@ class MembershipController extends BaseController{
            $payment->amount = $input['amount'];
            $payment->method_payment = $input['method_payment'];
            $payment->concept = $input['concept'];
+           //$payment->user_id = Auth::user()->id;
+           $payment->user_id = 1;
            $payment->save();                                                               
            
            $membership = new Membership();
+           $membership->branch_office_id = 1; 
            $membership->member_id = $input['memberId'];
            $membership->paid = $input['amount'];
            $membershipType = MembershipType::where('name',$input['membership_type'])->get();                      
@@ -60,4 +63,6 @@ class MembershipController extends BaseController{
             'error' => true
         ));                               
     }
+    
+    
 }

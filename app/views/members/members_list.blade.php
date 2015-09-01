@@ -62,43 +62,47 @@
                                 <th class="sorting_asc" tabindex="0" 
                                 aria-controls="dataTables-example" rowspan="1" colspan="1" 
                                 aria-sort="ascending" 
-                                aria-label="Rendering engine: activate to sort column descending" 
+                                style="width: 15px;">Id
+                                </th>
+                                <th class="sorting_asc" tabindex="0" 
+                                aria-controls="dataTables-example" rowspan="1" colspan="1" 
+                                aria-sort="ascending" 
                                 style="width: 50px;">Nombre
                                 </th>
                                 <th class="sorting" tabindex="0" aria-controls="dataTables-example" 
-                                rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending" 
+                                rowspan="1" colspan="1" 
                                 style="width: 70px;">Apellido Paterno
                                 </th>
                                 <th class="sorting" tabindex="0" aria-controls="dataTables-example" 
-                                rowspan="1" colspan="1" aria-label="Platform(s): activate to sort column ascending" 
+                                rowspan="1" colspan="1" 
                                 style="width: 70px;">Apellido Materno
                                 </th>
                                 <th class="sorting" tabindex="0" aria-controls="dataTables-example" 
-                                rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending" 
+                                rowspan="1" colspan="1" 
                                 style="width: 100px;">Direcci&oacute;n
                                 </th>
                                 <th class="sorting" tabindex="0" aria-controls="dataTables-example" 
-                                rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending" 
+                                rowspan="1" colspan="1" 
                                 style="width: 70px;">Colonia
                                 </th>          
                                 <th class="sorting" tabindex="0" aria-controls="dataTables-example" 
-                                rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending" 
+                                rowspan="1" colspan="1" 
                                 style="width: 70px;">Ciudad
                                 </th>      
                                 <th class="sorting" tabindex="0" aria-controls="dataTables-example" 
-                                rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending" 
+                                rowspan="1" colspan="1" 
                                 style="width: 70px;">Estado         
                                 </th>     
                                 <th class="sorting" tabindex="0" aria-controls="dataTables-example" 
-                                rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending" 
+                                rowspan="1" colspan="1" 
                                 style="width: 50px;">Tel. M&oacute;vil
                                 </th>         
                                 <th class="sorting" tabindex="0" aria-controls="dataTables-example" 
-                                rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending" 
+                                rowspan="1" colspan="1" 
                                 style="width: 60px;">Socio desde
                                 </th>       
                                 <th class="sorting" tabindex="0" aria-controls="dataTables-example" 
-                                rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending" 
+                                rowspan="1" colspan="1"  
                                 style="width: 60px;">
                                 </th>                                 
                             </tr>
@@ -109,6 +113,9 @@
                             @foreach($members as $member)      
                                 <tr class="gradeA odd" role="row">
                                     <td class="sorting_1">
+                                        {{$member->id}}
+                                    </td>                                    
+                                    <td class="sorting_1">
                                         {{$member->first_name}}
                                     </td>
                                     <td class="sorting_1">{{$member->last_name}}</td>
@@ -117,7 +124,7 @@
                                     <td class="sorting_1">{{$member->neighborhood}}</td>
                                     <td>{{$member->city}}</td>
                                     <td class="center">{{$member->town}}</td>
-                                    <td class="center">{{$member->mobile_phone}}</td>
+                                    <td class="center">{{$member->cell_phone}}</td>
                                     <td class="center">{{$member->created_at}}</td>
                                     <td style="text-align: center; vertical-align: middle; ">
                                         <span class="member-id" style="display:none">
@@ -525,252 +532,252 @@
 <script>
 $(document).ready(function() {        
 
-    /*
-     |------------------------------------------------------------------------
-     | Add Members
-     |------------------------------------------------------------------------        
-    */    
+/*
+ |------------------------------------------------------------------------
+ | Add Members
+ |------------------------------------------------------------------------        
+*/    
 
-    $('#save_member').on('click',function(e){
-        //id = $('#member_id_edit').text();
-        //alert(id);
-        var birth = document.getElementById("member_date_birth");
-        var since = document.getElementById("member_since");
-        var data = {            
-            first_name :$("#member_first_name").val(),
-            last_name :$("#member_last_name").val(),
-            second_last_name:$("#member_second_last_name").val(),
-            nickname :$("#member_nickname").val(),
-            sex :$("#member_sex").val(), 
-            date_birth  :1,                                    
-            member_since   :1,                               
-            address :$("#member_address").val(), 
-            neighborhood :$("#member_neighborhood").val(), 
-            town :$("#member_town").val(), 
-            city :$("#member_city").val(), 
-            postal_code:$("#member_postal_code").val(),
-            home_phone :$("#member_home_phone").val(), 
-            cell_phone :$("#member_cell_phone").val(), 
-            email :$("#member_email").val(), 
-            company :$("#member_company").val(),  
-            job :$("#member_job").val()                         
-        }, 
-        id = $('#member_id_edit').text();
-        //alert("ok");        
-        data.date_birth = birth.value;
-        data.member_since = since.value;        
-        $.ajax({
-            type: "POST",
-            url: '{{ URL::to('/member') }}' + (typeof id !== 'undefined'?('/' + id):''),
-            data: data,
-            success: function(data, textStatus, jqXHR) {                        
-                if(data.success == true){
-                    window.location.reload();
-                }
-                else{alert(data.errors);}                        
-            },
-            dataType: 'json'
-        });              
-        window.location.reload();          
-    });
+$('#save_member').on('click',function(e){
+    //id = $('#member_id_edit').text();
+    //alert(id);
+    var birth = document.getElementById("member_date_birth");
+    var since = document.getElementById("member_since");
+    var data = {            
+        first_name :$("#member_first_name").val(),
+        last_name :$("#member_last_name").val(),
+        second_last_name:$("#member_second_last_name").val(),
+        nickname :$("#member_nickname").val(),
+        sex :$("#member_sex").val(), 
+        date_birth  :1,                                    
+        member_since   :1,                               
+        address :$("#member_address").val(), 
+        neighborhood :$("#member_neighborhood").val(), 
+        town :$("#member_town").val(), 
+        city :$("#member_city").val(), 
+        postal_code:$("#member_postal_code").val(),
+        home_phone :$("#member_home_phone").val(), 
+        cell_phone :$("#member_cell_phone").val(), 
+        email :$("#member_email").val(), 
+        company :$("#member_company").val(),  
+        job :$("#member_job").val()                         
+    }, 
+    id = $('#member_id_edit').text();
+    //alert("ok");        
+    data.date_birth = birth.value;
+    data.member_since = since.value;        
+    $.ajax({
+        type: "POST",
+        url: '{{ URL::to('/member') }}' + (typeof id !== 'undefined'?('/' + id):''),
+        data: data,
+        success: function(data, textStatus, jqXHR) {                        
+            if(data.success == true){
+                window.location.reload();
+            }
+            else{alert(data.errors);}                        
+        },
+        dataType: 'json'
+    });              
+    window.location.reload();          
+});
 
-    $('#add_member').on('click', function(e) { 
-        $("#head_member_modal").html("Agregar socio");
-        $('#member_id_edit').html("0");
-        $('#modal-member').modal();
-    }); 
+$('#add_member').on('click', function(e) { 
+    $("#head_member_modal").html("Agregar socio");
+    $('#member_id_edit').html("0");
+    $('#modal-member').modal();
+}); 
 
-    /*
-     |------------------------------------------------------------------------
-     | Add Payments
-     |------------------------------------------------------------------------
-    */        
+/*
+ |------------------------------------------------------------------------
+ | Add Payments
+ |------------------------------------------------------------------------
+*/        
 
-    $('.add_pay').on('click', function(e) {
-        var o = $(this),
-        id = o.parents('td:first').find('span.member-id').text(); 
-        $('#member_id_add_pay').html(id);
-        fiilModalPayment(id);
-        $('#modal-add-pay').modal();
-    });          
+$('.add_pay').on('click', function(e) {
+    var o = $(this),
+    id = o.parents('td:first').find('span.member-id').text(); 
+    $('#member_id_add_pay').html(id);
+    fiilModalPayment(id);
+    $('#modal-add-pay').modal();
+});          
 
-    function fiilModalPayment(id) {
-            $.ajax({
-                type: 'GET',
-                url: '{{ URL::to('/member/info_payment_wizard') }}' + '/' + id,
-                dataType: 'json',
-                success: function(d) {
-                    $('#full_name_member_add_pay').html(d.first_name+" "+
-                            d.last_name+" "+d.second_last_name); 
-                    var tbody = $('#tbody-memberships-actives');
-
-                    var mems = d.memberships;
-                    for (i = 0; i < mems.length; i++)
-                    {
-                        tbody.append("<tr>"+
-                            "<td>"+mems[i].start+"</td>"+
-                            "<td>"+i+"</td>"+
-                            "<td>"+mems[i].membership_name+"</td>"+
-                            "<td>"+mems[i].price+"</td>"+
-                            "<td>"+mems[i].paid+"</td>"+
-                            "<td>"+0+"</td>"+
-                            "<td>"+0+"</td></tr>");
-                    }                            
-                }
-            });
-    }        
-
-    $('#save_payment').on('click', function(e) {
-        var data = {
-            amount: $('#amount_add_payment').val(),                
-            method_payment: $('#method_payment_add_payment').val(),
-            concept: "MEMBRESIA"
-        }, 
-        id = $('#member_id_add_pay').text();
-        $.ajax({
-            type: "POST",
-            url: '{{ URL::to('/payment') }}' + (typeof id !== 'undefined'?('/' + id):''),
-            data: data,
-            success: function(data, textStatus, jqXHR) {                        
-                if(data.success == true){
-                    window.location.reload();
-                }
-                else{alert(data.errors);}                        
-            },
-            dataType: 'json'
-        });              
-        window.location.reload();                        
-    });        
-
-    /*
-     |------------------------------------------------------------------------
-     | Add Memberships
-     |------------------------------------------------------------------------
-    */    
-
-    $('.add_membership').on('click', function(e) {            
-        var o = $(this),
-        id = o.parents('td:first').find('span.member-id').text();          
-        $('#member_id_add_membership').html(id);
-        //$("#head_member_modal").html("Agregar socio");
-        //alert("ok");
-        fiilModalAddmembership(id);
-        $('#modal-member').modal();            
-    });             
-
-    function fiilModalAddmembership(id) {
+function fiilModalPayment(id) {
         $.ajax({
             type: 'GET',
-            url: '{{ URL::to('/member/info_membership_wizard') }}' + '/' + id,
+            url: '{{ URL::to('/member/info_payment_wizard') }}' + '/' + id,
             dataType: 'json',
             success: function(d) {
-                $('#full_name_member_add_membership').html(d.first_name+" "+
+                $('#full_name_member_add_pay').html(d.first_name+" "+
                         d.last_name+" "+d.second_last_name); 
+                var tbody = $('#tbody-memberships-actives');
 
-                var select = $('#type_add_membership');
-
-                var memst = d.membership_types;
-
-                for (i = 0; i < memst.length; i++)
+                var mems = d.memberships;
+                for (i = 0; i < mems.length; i++)
                 {
-                    select.append("<option>"+memst[i].name+"</option>");
-                }
+                    tbody.append("<tr>"+
+                        "<td>"+mems[i].start+"</td>"+
+                        "<td>"+i+"</td>"+
+                        "<td>"+mems[i].membership_name+"</td>"+
+                        "<td>"+mems[i].price+"</td>"+
+                        "<td>"+mems[i].paid+"</td>"+
+                        "<td>"+0+"</td>"+
+                        "<td>"+0+"</td></tr>");
+                }                            
             }
         });
-    }   
-    
-    $('#save_add_membership').on('click', function(e) {
-        var data = {
-            amount: $('#amount_add_membership').val(),                
-            method_payment: $('#method_payment_add_membership').val(),
-            concept: "MEMBRESIA NUEVA",
-            membership_type: $('#type_add_membership').val(),
-            start: $('#date_start').val()
-        }, 
-        id = $('#member_id_add_membership').text();
-        //alert(id+" "+data.amount+" "+data.method_payment+" "+data.concept+" "+data.membership_type+" "+data.start)
-        $.ajax({
-            type: "POST",
-            url: '{{ URL::to('/membership') }}' + (typeof id !== 'undefined'?('/' + id):''),
-            data: data,
-            success: function(data, textStatus, jqXHR) {                        
-                if(data.success == true){
-                    window.location.reload();
-                }
-                else{alert(data.errors);}                        
-            },
-            dataType: 'json'
-        });              
-        window.location.reload();                        
-    });     
+}        
 
-    /*
-     |------------------------------------------------------------------------
-     | Edit Members
-     |------------------------------------------------------------------------
-    */    
-
-
-    function fiilModalMember(id) {
-        $.ajax({
-            type: 'GET',
-            url: '{{ URL::to('/member') }}' + '/' + id,
-            dataType: 'json',
-            success: function(d) {
-                $("#member_first_name").val(d.member.first_name);
-                $("#member_last_name").val(d.member.last_name);
-                $("#member_second_last_name").val(d.member.second_last_name);
-                $("#member_nickname").val(d.member.nickname);
-                $("#member_sex").val(d.member.sex); 
-                $("#date_birth").val(d.member.birth);                                     
-                $("#member_since").val(d.member.member_since);                               
-                $("#member_address").val(d.member.address); 
-                $("#member_neighborhood").val(d.member.neighborhood); 
-                $("#member_town").val(d.member.town); 
-                $("#member_city").val(d.member.city); 
-                $("#member_postal_code").val(d.member.postal_code);
-                $("#member_home_phone").val(d.member.home_phone); 
-                $("#member_cell_phone").val(d.member.cell_phone); 
-                $("#member_email").val(d.member.email); 
-                $("#member_company").val(d.member.company);  
-                $("#member_job").val(d.member.job);                  
+$('#save_payment').on('click', function(e) {
+    var data = {
+        amount: $('#amount_add_payment').val(),                
+        method_payment: $('#method_payment_add_payment').val(),
+        concept: "MEMBRESIA"
+    }, 
+    id = $('#member_id_add_pay').text();
+    $.ajax({
+        type: "POST",
+        url: '{{ URL::to('/payment') }}' + (typeof id !== 'undefined'?('/' + id):''),
+        data: data,
+        success: function(data, textStatus, jqXHR) {                        
+            if(data.success == true){
+                window.location.reload();
             }
-        });
-    }   
+            else{alert(data.errors);}                        
+        },
+        dataType: 'json'
+    });              
+    window.location.reload();                        
+});        
 
-    $('.edit_member').on('click', function(e) {
-        var o = $(this),
-        id = o.parents('td:first').find('span.member-id').text(); 
-        $('#member_id_edit').html(id);
-        $("#head_member_modal").html("Editar socio");
-        fiilModalMember(id);
-        $('#modal-member').modal();
-    });        
+/*
+ |------------------------------------------------------------------------
+ | Add Memberships
+ |------------------------------------------------------------------------
+*/    
 
-    /*
-     |------------------------------------------------------------------------
-     | Delete Members
-     |------------------------------------------------------------------------
-    */    
+$('.add_membership').on('click', function(e) {  
+    //alert('ok');
+    var o = $(this),
+    id = o.parents('td:first').find('span.member-id').text();          
+    $('#member_id_add_membership').html(id);
+    //$("#head_member_modal").html("Agregar socio");
+    //alert("ok");
+    fiilModalAddmembership(id);
+    $('#modal-add-membership').modal();            
+});             
 
-    $('.delete_member').on('click', function(e) {
-        if (!confirm('¿Desea borrar el socio?'))
-                return false;
-        var o = $(this),
-        id = o.parents('td:first').find('span.member-id').text();  
-        $.ajax({
-            type: "DELETE",
-            url: '{{ URL::to('/member') }}' + '/' + id,
-            success: function(data, textStatus, jqXHR) {                        
-                if(data.success == true){
-                    window.location.reload();
-                }
-                else{alert(data.errors);}                        
-            },
-            dataType: 'json'
-        });              
-        window.location.reload();        
-    });                                            
+function fiilModalAddmembership(id) {
+    $.ajax({
+        type: 'GET',
+        url: '{{ URL::to('/member/info_membership_wizard') }}' + '/' + id,
+        dataType: 'json',
+        success: function(d) {
+            $('#full_name_member_add_membership').html(d.first_name+" "+
+                    d.last_name+" "+d.second_last_name); 
+
+            var select = $('#type_add_membership');
+
+            var memst = d.membership_types;
+
+            for (i = 0; i < memst.length; i++)
+            {
+                select.append("<option>"+memst[i].name+"</option>");
+            }
+        }
+    });
+}   
+
+$('#save_add_membership').on('click', function(e) {
+    var data = {
+        amount: $('#amount_add_membership').val(),                
+        method_payment: $('#method_payment_add_membership').val(),
+        concept: "MEMBRESIA NUEVA",
+        membership_type: $('#type_add_membership').val(),
+        start: $('#date_start').val()
+    }, 
+    id = $('#member_id_add_membership').text();
+    //alert(id+" "+data.amount+" "+data.method_payment+" "+data.concept+" "+data.membership_type+" "+data.start)
+    $.ajax({
+        type: "POST",
+        url: '{{ URL::to('/membership') }}' + (typeof id !== 'undefined'?('/' + id):''),
+        data: data,
+        success: function(data, textStatus, jqXHR) {                        
+            if(data.success == true){
+                window.location.reload();
+            }
+            else{alert(data.errors);}                        
+        },
+        dataType: 'json'
+    });              
+    window.location.reload();                        
+});     
+
+/*
+ |------------------------------------------------------------------------
+ | Edit Members
+ |------------------------------------------------------------------------
+*/    
+
+function fiilModalMember(id) {
+    $.ajax({
+        type: 'GET',
+        url: '{{ URL::to('/member') }}' + '/' + id,
+        dataType: 'json',
+        success: function(d) {
+            $("#member_first_name").val(d.member.first_name);
+            $("#member_last_name").val(d.member.last_name);
+            $("#member_second_last_name").val(d.member.second_last_name);
+            $("#member_nickname").val(d.member.nickname);
+            $("#member_sex").val(d.member.sex); 
+            $("#date_birth").val(d.member.birth);                                     
+            $("#member_since").val(d.member.member_since);                               
+            $("#member_address").val(d.member.address); 
+            $("#member_neighborhood").val(d.member.neighborhood); 
+            $("#member_town").val(d.member.town); 
+            $("#member_city").val(d.member.city); 
+            $("#member_postal_code").val(d.member.postal_code);
+            $("#member_home_phone").val(d.member.home_phone); 
+            $("#member_cell_phone").val(d.member.cell_phone); 
+            $("#member_email").val(d.member.email); 
+            $("#member_company").val(d.member.company);  
+            $("#member_job").val(d.member.job);                  
+        }
+    });
+}   
+
+$('.edit_member').on('click', function(e) {
+    var o = $(this),
+    id = o.parents('td:first').find('span.member-id').text(); 
+    $('#member_id_edit').html(id);
+    $("#head_member_modal").html("Editar socio");
+    fiilModalMember(id);
+    $('#modal-member').modal();
+});        
+
+/*
+ |------------------------------------------------------------------------
+ | Delete Members
+ |------------------------------------------------------------------------
+*/    
+
+$('.delete_member').on('click', function(e) {
+    if (!confirm('¿Desea borrar el socio?'))
+            return false;
+    var o = $(this),
+    id = o.parents('td:first').find('span.member-id').text();  
+    $.ajax({
+        type: "DELETE",
+        url: '{{ URL::to('/member') }}' + '/' + id,
+        success: function(data, textStatus, jqXHR) {                        
+            if(data.success == true){
+                window.location.reload();
+            }
+            else{alert(data.errors);}                        
+        },
+        dataType: 'json'
+    });              
+    window.location.reload();        
+});                                            
 
 });              
     

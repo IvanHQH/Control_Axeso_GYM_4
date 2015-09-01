@@ -23,11 +23,7 @@ Route::get('member/info_membership_wizard/{id}', 'MemberController@info_membersh
 Route::post('member/{memberId?}','MemberController@store');
 Route::delete('member/{memberId}','MemberController@delete');
 Route::get('member/{memberId}','MemberController@get');
-//Route::post('member/delete/{memberId?}','MemberController@delete');
-/*Route::post('member//{memberId?}', function () {
-    echo "ok";die();
-});*/
-
+Route::get('member/quick_search/{ident}','MemberController@get_quick_search');
 /*
 |------------------------------------------------------------------------
 | Routes Memberships
@@ -45,6 +41,12 @@ Route::post('/membership/{memberId?}', 'MembershipController@store');
 */
 
 Route::get('membership_types_list', 'MembershipTypeController@membership_types_list');
+Route::post('membership_type/{membershipTypeId?}','MembershipTypeController@store');
+Route::delete('membership_type/{membeshipTypeId}','MembershipTypeController@delete');
+Route::get('membership_type/{membeshipTypeId}','MembershipTypeController@get');
+
+Route::get('available_memberships_types', 'MembershipTypeController@available_memberships_types');
+Route::get('unavailable_memberships_types', 'MembershipTypeController@unavailable_memberships_types');
 
 /*
 |------------------------------------------------------------------------
@@ -54,6 +56,9 @@ Route::get('membership_types_list', 'MembershipTypeController@membership_types_l
 
 Route::get('memberships_paymets', 'PaymentController@payments_list');
 Route::post('/payment/{memberId?}', 'PaymentController@store');
+Route::post('/payment/edit/{paymentId?}', 'PaymentController@store_edit');
+Route::get('payment/{paymentId}','PaymentController@get');
+Route::delete('payment/{paymentId}','PaymentController@delete');
 
 /*
 |------------------------------------------------------------------------
@@ -64,9 +69,6 @@ Route::post('/payment/{memberId?}', 'PaymentController@store');
 Route::post('validate_membership', 'HomeController@validate_membership');
 Route::get('/check_notifications_axeso', 'HomeController@check_notifications');
 Route::get('expiring_memberships', 'HomeController@expiring_memberships');
-Route::get('test', 'HomeController@test');
-Route::get('available_memberships_types', 'HomeController@available_memberships_types');
-Route::get('unavailable_memberships_types', 'HomeController@unavailable_memberships_types');
 Route::get('quick_search', 'HomeController@quick_search');
 
 /*
@@ -118,22 +120,21 @@ Route::get('/settings_turner_cash', function(){
 */
 
 Route::get('/test', function(){
-    /*$payments = DB::select('call payments()');
-    foreach($payments as $payment) {
-    }  */
-        $memberId = 10;
-        if($memberId == 0)
-            $member = new Member();    
-        else{
-            $member = Member::find($memberId); 
-            if($member == null){
-                return Response::json(
-                        array('succes'=>false,'errors'=>'member not found')
-                );                
-            }else{
-                return Response::json(
-                        array('succes'=>true)
-                );                  
-            }                
-        }       
+    //return "ok";
+    //echo date_format("2015-08-14", 'Y-m-d');    
+    /*$fecha = DateTime::createFromFormat('Y-m-d', '2015-08-14');
+    echo $fecha->format('Y-m-d H:i:s');  */    
+    //echo date("Y-m-d H:i:s");  now
+    //$membershipTypesAvailabes = DB::select('call membershyp_types_availables(false)'); 
+    //echo count($membershipTypesAvailabes);
+    /*$dateTimes = DB::select('call assists_last(1,1)');
+    $dateTimesArray = array();
+    foreach($dateTimes as $dateTime)
+    {
+        $dtt = explode(" ", $dateTime->entrance);     
+        $dtt2 = explode("-", $dtt[1]);
+        $array = array('name_day'=>$dtt[0],'number_day'=>$dtt2[0],'month'=>$dtt2[1],'year'=>$dtt2[2],'time'=>$dtt[2]);
+        array_push($dateTimesArray, $array);
+    }
+    return Response::json($dateTimesArray);    */     
 });

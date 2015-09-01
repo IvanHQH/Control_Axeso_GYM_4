@@ -13,4 +13,8 @@
  */
 class Member extends BaseModel{
     //put your code here
+    public static function pathPhoto($memberId)
+    {
+        return $memberId.'.png';
+    }
 }

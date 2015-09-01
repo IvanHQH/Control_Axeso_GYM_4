@@ -23,7 +23,7 @@ class MemberController extends BaseController{
     public function info_payment_wizard($id)
     {
         $res = array();       
-        $res['memberships'] = DB::select('call member_with_membership_active('.$id.')');  
+        $res['memberships'] = DB::select('call member_with_membership_active('.$id.',1)');  
         $res = array_merge(Member::find($id)->toArray(),$res); 
         return Response::json($res);
     }    
@@ -114,8 +114,77 @@ class MemberController extends BaseController{
         }   
         return Response::json(array(
                 'success' => false,
-                'errors' => 'Socio no eliminado'
+                'errors' => 'Socio no encontrado'
         ));        
+    }
+    
+    public function get_quick_search($ident)
+    {         
+        //$mem = Member::find($memberId);
+        $mem = $this->foundMember($ident);
+        if( $mem == null ){            
+            return Response::json(array(                
+                'success' => false,
+                'errors' => 'Socio no encontrado'                                
+            ));             
+        }   
+        $memberId = $mem->id;
+        $idBranchOffice = 1;
+        $member = array();
+        $member['img_member'] = Member::pathPhoto($memberId);                        
+        $member['txt_main'] = $mem->first_name." ".$mem->last_name." ".$mem->second_last_name;
+        $member['assists_last'] = MethodsConstants::datesTimesStrEnglishToEspanishArray(
+                DB::select('call assists_last('.$memberId.','.$idBranchOffice.')'));
+        $member['memberships'] = $this->dateTimeFormatMemberships(
+                DB::select('call member_with_membership_active('.$memberId.','.$idBranchOffice.')'));
+        $member['notes'] = 'notes';                              
+        return Response::json(array(
+            'success' => true,
+            'member' => $member
+        ));                              
+    }
+    
+    /*
+     * Found member for id or part of the full name
+     */
+    private function foundMember($ident)
+    {
+        $ident = "Herandez";
+        $member = Member::find($ident);
+        if( $member == null ){            
+            $member = Member::whereIn('first_name', [$ident])->first();
+            if( $member == null ){  
+                $member = Member::whereIn('last_name', [$ident])->first();
+                if( $member == null )
+                    $member = Member::whereIn('second_last_name', [$ident])->first();
+            }
+        }        
+        return $member;
+        /*if($member == null)
+            return Response::json(array('success' => false,'errors' => 'Socio no encontrado'));             
+        else
+            return Response::json(array('success' => true,'member' => $member)); */           
+    }
+    
+    private function dateTimeFormatMemberships($memberships)
+    {
+        $array = array();
+        foreach($memberships as $member){
+            $dtt = explode("-", $member->start);
+            $aux = MethodsConstants::nameMonthEnglishToEspanish($dtt[1]);
+            $member->start = $dtt[0] . "-" . $aux . "-" . $dtt[2];
+            
+            $dtt = explode("-", $member->available_until);
+            $aux = MethodsConstants::nameMonthEnglishToEspanish($dtt[1]);
+            $member->available_until = $dtt[0] . "-" . $aux . "-" . $dtt[2]; 
+            
+            if($member->active == 1)
+                $member->active  = "Activa";
+            else
+                $member->active  = "No Activa";
+            array_push($array, $member);
+        }
+        return $array;
     }
     
 }

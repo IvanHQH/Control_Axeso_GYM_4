@@ -24,7 +24,7 @@
                         <div class="row">
                             <div class="col-sm-4">
                                 <button type="button" class="btn btn-outline btn-primary" 
-                                    id="btn-show-excess" href="#modal-membershiptype" data-toggle="modal">                                   
+                                    id="add_membership_type" data-toggle="modal">                                   
                                 Agregar
                                 </button>                                 
                             </div>                              
@@ -71,7 +71,7 @@
                                 </th>
                                 <th class="sorting" tabindex="0" aria-controls="dataTables-example" 
                                 rowspan="1" colspan="1" aria-label="Platform(s): activate to sort column ascending" 
-                                style="width: 185px;">Habilitada desde
+                                style="width: 185px;">Diponible hasta
                                 </th>
                                 <th class="sorting" tabindex="0" aria-controls="dataTables-example" rowspan="1" 
                                 colspan="1" aria-label="Engine version: activate to sort column ascending" 
@@ -97,11 +97,14 @@
                                 <td class="center">{{$memshipType->price}}</td>
                                 <td class="center">{{$memshipType->duration}}</td>
                                 <td style="text-align: center; vertical-align: middle; ">
-                                    <a id="edit_membershiptype" class="edit ml10" href="javascript:void(0)" title="Editar">
+                                    <span class="membership-type-id" style="display:none">
+                                        {{$memshipType->id}}
+                                    </span>                                      
+                                    <a class="edit_membershiptype" href="javascript:void(0)" title="Editar">
                                         <i class="glyphicon glyphicon-edit">                                    
                                         </i>
                                     </a>
-                                    <a id="delete_membershiptype" class="remove ml10" href="javascript:void(0)" title="Eliminar">
+                                    <a class="delete_membershiptype" href="javascript:void(0)" title="Eliminar">
                                         <i class="glyphicon glyphicon-remove">                                    
                                         </i>
                                     </a>                                 
@@ -166,27 +169,28 @@
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-md-12">
+                            <div id="membership_type_id_edit" style="display: none"></div>                            
                             <div class="form-group">
                                 <label>Nombre</label>
-                                <input class="form-control">                                
+                                <input id="membership_type_name" class="form-control" value="promocion spetiembre">                                
                             </div>     
                             <div class="form-group">    
-                                <label>Fecha creada</label>
-                                <input type="date" class="form-control" id="date_init">                                
+                                <label>habilitada hasta</label>
+                                <input id="membership_type_available_unitl" type="date" class="form-control">                                
                             </div>         
                             <div class="form-group">                                 
                                 <label>Precio</label>
-                                <input class="form-control"> 
+                                <input id="membership_type_price" class="form-control" value="600"> 
                             </div>     
                             <div class="form-group">                                 
                                 <label>Duración (días)</label>
-                                <input class="form-control">                                 
+                                <input id="membership_type_duration" class="form-control" value="6">                                 
                             </div>     
-                            <div class="form-group">                             
+                            <!--div class="form-group">                             
                                 <label>
-                                    <input type="checkbox" value="">  Disponible
+                                    <input id="membership_type_available" type="checkbox" value="1">  Disponible
                                 </label>
-                            </div>                                  
+                            </div-->                                  
                         </div>                        
                     </div>
                 </div>
@@ -195,7 +199,7 @@
                     <button type="button" class="btn btn-default" data-dismiss="modal">
                             Cerrar
                     </button> 
-                    <button type="button" class="btn btn-primary">
+                    <button id="save_membership_type" type="button" class="btn btn-primary">
                             Guardar
                     </button>
                 </div>
@@ -206,18 +210,102 @@
 
 @section('scripts')
 <script>
-    $(document).ready(function() {
+$(document).ready(function() {
+
+/*
+ |------------------------------------------------------------------------
+ | Add MembershipTypes 
+ |------------------------------------------------------------------------        
+*/  
+
+$('#add_membership_type').on('click',function(e){    
+    $('#modal-membershiptype').modal();
+    $('#membership_type_id_edit').html("0");
+});
+
+$('#save_membership_type').on('click',function(e){
+    var available_unitl = document.getElementById("membership_type_available_unitl");
+    var data = {
+        name : $("#membership_type_name").val(),                            
+        //available_unitl : $("#membership_type_available_unitl").val(),                            
+        available_until : 0,
+        price : $("#membership_type_price").val(),
+        duration : $("#membership_type_duration").val()//,
+        //available : $("#membership_type_available").val()
+        //available : $("#membership_type_available").val()  
+    },     
+    id = $('#membership_type_id_edit').text();
+    data.available_until = available_unitl.value;
+    //alert(id);
+    $.ajax({
+        type: "POST",
+        url: '{{ URL::to('/membership_type') }}' + (typeof id !== 'undefined'?('/' + id):''),
+        data: data,
+        success: function(data, textStatus, jqXHR) {  
+            if(data.success == true){
+                window.location.reload();
+            }
+            else{alert(data.errors);}                        
+        },
+        dataType: 'json'
+    });              
+    window.location.reload();                        
         
-        $('#edit_membershiptype').on('click', function(e) {
-            //alert('ok');
-            $('#modal-membershiptype').modal();
-        });        
-        
-        $('#delete_membershiptype').on('click', function(e) {
-            if (!confirm('¿Desea borrar tipo de membresía?'))
-                    return false;
-        });        
-                   
+});
+
+/*
+ |------------------------------------------------------------------------
+ | Edit MembershipTypes 
+ |------------------------------------------------------------------------        
+*/  
+
+$('.edit_membershiptype').on('click', function(e) {
+    //alert('ok');
+    var o = $(this),  
+    id = o.parents('td:first').find('span.membership-type-id').text();     
+    $('#membership_type_id_edit').html(id);        
+    fillModal(id);
+    $('#modal-membershiptype').modal();
+});        
+
+function fillModal(id){
+    $.ajax({
+        type : 'GET',
+        url : '{{URL::to('membership_type')}}'+'/'+id,
+        datatype: 'json',
+        success:function(d){
+            $("#membership_type_name").val(d.membership_type.name),                                                        
+            $("#membership_type_price").val(d.membership_type.price),
+            $("#membership_type_duration").val(d.membership_type.duration)            
+        },
     });
+}
+
+/*
+ |------------------------------------------------------------------------
+ | Delete MembershipTypes 
+ |------------------------------------------------------------------------        
+*/  
+
+$('.delete_membershiptype').on('click', function(e) {
+    if (!confirm('¿Desea borrar tipo de membresía?'))
+            return false;
+    var o = $(this),  
+    id = o.parents('td:first').find('span.membership-type-id').text(); 
+    $.ajax({
+        type : "DELETE",
+        url : '{{URL::to('/membership_type')}}'+'/'+id,
+        success: function(data, textStatus, jqXHR){
+            if(data.success == true){
+                window.location.reload();
+            }
+            else{alert(data.errors);}             
+        },
+        dataType: 'json'
+    });    
+    window.location.reload();  
+});        
+
+});
 </script>
 @stop

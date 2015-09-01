@@ -172,9 +172,7 @@
             <!-- /.navbar-static-side -->
         </nav>
     
-        @yield('content')
-
-        
+        @yield('content')        
         
         <!-- /#page-wrapper -->
     </div>
