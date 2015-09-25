@@ -70,4 +70,21 @@ class MethodsConstants{
         return $dateTimesArray;
     }    
     
+    public function login()
+    {
+        $user = User::where('nick_name',Input::get('nick_name'))->first();
+        if($user == null)
+            return Redirect::to('login');
+        else
+        {
+            if($user->password == Input::get('password')){
+                if(BranchOffice::where('name', Input::get('name_client'))->count() > 0 ){
+                    Auth::loginUsingId($user->id);
+                    return Redirect::to('quick_search');                    
+                }else
+                    return Redirect::to('login');
+            }
+            else return Redirect::to('login');
+        }   
+    }
 }

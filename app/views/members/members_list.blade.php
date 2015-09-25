@@ -14,179 +14,86 @@
     <div class="col-lg-12">
         <div class="panel panel-default">
             <!-- /.panel-heading -->
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-sm-4">                            
+                        <button id="add_member"  type="button" class="btn btn-outline btn-primary" 
+                                 data-toggle="modal">
+                            Agregar
+                        </button>    
+                    </div>
+                </div>             
+            </div>
             <!-- panel-body -->
             <div class="panel-body">
-                <!-- datatable-wrapper -->
                 <div class="dataTable_wrapper">
-                    <div id="dataTables-example_wrapper" class="dataTables_wrapper 
-                         form-inline dt-bootstrap no-footer">
-                        <!-- show-entries -->
-                        <div class="row">
-                            <div class="col-sm-4">                            
-                                <button id="add_member"  type="button" class="btn btn-outline btn-primary" 
-                                         data-toggle="modal">
-                                    Agregar
-                                </button>    
-                            </div>
-                            <div class="col-sm-4">
-                            <div class="dataTables_length" id="dataTables-example_length">
-                                <label>Mostrar 
-                                    <select id="" name="dataTables-example_length" 
-                                    aria-controls="dataTables-example" class="form-control input-sm">
-                                        <option value="10">10</option>
-                                        <option value="25">25</option>
-                                        <option value="50">50</option>
-                                        <option value="100">100</option>
-                                    </select> filas
-                                </label>
-                            </div>
-                            </div>
-                            <div class="col-sm-4">
-                                <div id="dataTables-example_filter" class="dataTables_filter">
-                                    <label>Buscar:
-                                        <input type="search" class="form-control input-sm" 
-                                            placeholder="" aria-controls="dataTables-example">
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- /.show-entries -->
-                        <div class="row">
-                        <div class="col-sm-12">
-                            <table class="table table-striped table-bordered 
-                                table-hover dataTable no-footer" id="dataTables-example"
-                                role="grid" aria-describedby="dataTables-example_info">
+                    <!--table class="table table-striped table-bordered table-hover" id="dataTables-example"-->
+                    <table class="table table-striped table-bordered table-hover" id="dataTables-example">                     
                         <thead>
                             <!-- headers-columns -->
                             <tr role="row">
-                                <th class="sorting_asc" tabindex="0" 
-                                aria-controls="dataTables-example" rowspan="1" colspan="1" 
-                                aria-sort="ascending" 
-                                style="width: 15px;">Id
-                                </th>
-                                <th class="sorting_asc" tabindex="0" 
-                                aria-controls="dataTables-example" rowspan="1" colspan="1" 
-                                aria-sort="ascending" 
-                                style="width: 50px;">Nombre
-                                </th>
-                                <th class="sorting" tabindex="0" aria-controls="dataTables-example" 
-                                rowspan="1" colspan="1" 
-                                style="width: 70px;">Apellido Paterno
-                                </th>
-                                <th class="sorting" tabindex="0" aria-controls="dataTables-example" 
-                                rowspan="1" colspan="1" 
-                                style="width: 70px;">Apellido Materno
-                                </th>
-                                <th class="sorting" tabindex="0" aria-controls="dataTables-example" 
-                                rowspan="1" colspan="1" 
-                                style="width: 100px;">Direcci&oacute;n
-                                </th>
-                                <th class="sorting" tabindex="0" aria-controls="dataTables-example" 
-                                rowspan="1" colspan="1" 
-                                style="width: 70px;">Colonia
-                                </th>          
-                                <th class="sorting" tabindex="0" aria-controls="dataTables-example" 
-                                rowspan="1" colspan="1" 
-                                style="width: 70px;">Ciudad
-                                </th>      
-                                <th class="sorting" tabindex="0" aria-controls="dataTables-example" 
-                                rowspan="1" colspan="1" 
-                                style="width: 70px;">Estado         
-                                </th>     
-                                <th class="sorting" tabindex="0" aria-controls="dataTables-example" 
-                                rowspan="1" colspan="1" 
-                                style="width: 50px;">Tel. M&oacute;vil
-                                </th>         
-                                <th class="sorting" tabindex="0" aria-controls="dataTables-example" 
-                                rowspan="1" colspan="1" 
-                                style="width: 60px;">Socio desde
-                                </th>       
-                                <th class="sorting" tabindex="0" aria-controls="dataTables-example" 
-                                rowspan="1" colspan="1"  
-                                style="width: 60px;">
-                                </th>                                 
+                                <th>Id</th>
+                                <th>Nombre</th>
+                                <th>Apellido Paterno</th>
+                                <th>Apellido Materno</th>
+                                <th>Direcci&oacute;n</th>
+                                <th>Colonia</th>          
+                                <th>Ciudad</th>      
+                                <th>Estado</th>     
+                                <th>Tel. M&oacute;vil</th>         
+                                <th>Socio desde</th>       
+                                <th style="width: 70px"></th>                                 
                             </tr>
                             <!-- /.headers-columns -->
                         </thead>
                         <tbody>
                         @if(isset($members))    
-                            @foreach($members as $member)      
-                                <tr class="gradeA odd" role="row">
-                                    <td class="sorting_1">
+                        @foreach($members as $member)      
+                            <tr class="gradeA odd" role="row">
+                                <td class="sorting_1">
+                                    {{$member->id}}
+                                </td>                                    
+                                <td class="sorting_1">
+                                    {{$member->first_name}}
+                                </td>
+                                <td class="sorting_1">{{$member->last_name}}</td>
+                                <td class="sorting_1">{{$member->second_last_name}}</td>
+                                <td class="sorting_1">{{$member->address}}</td>
+                                <td class="sorting_1">{{$member->neighborhood}}</td>
+                                <td>{{$member->city}}</td>
+                                <td class="center">{{$member->town}}</td>
+                                <td class="center">{{$member->cell_phone}}</td>
+                                <td class="center">{{$member->created_at}}</td>
+                                <td style="text-align: center; vertical-align: middle; ">
+                                    <span class="member-id" style="display:none">
                                         {{$member->id}}
-                                    </td>                                    
-                                    <td class="sorting_1">
-                                        {{$member->first_name}}
-                                    </td>
-                                    <td class="sorting_1">{{$member->last_name}}</td>
-                                    <td class="sorting_1">{{$member->second_last_name}}</td>
-                                    <td class="sorting_1">{{$member->address}}</td>
-                                    <td class="sorting_1">{{$member->neighborhood}}</td>
-                                    <td>{{$member->city}}</td>
-                                    <td class="center">{{$member->town}}</td>
-                                    <td class="center">{{$member->cell_phone}}</td>
-                                    <td class="center">{{$member->created_at}}</td>
-                                    <td style="text-align: center; vertical-align: middle; ">
-                                        <span class="member-id" style="display:none">
-                                            {{$member->id}}
-                                        </span>                                          
-                                        <a class ="edit_member" href="javascript:void(0)" 
-                                           title="Editar">
-                                            <i class="glyphicon glyphicon-edit">                                    
-                                            </i>
-                                        </a>
-                                        <a class ="delete_member" href="javascript:void(0)" 
-                                           title="Eliminar">
-                                            <i class="glyphicon glyphicon-remove">                                    
-                                            </i>
-                                        </a>                                      
-                                        <a class = "add_pay" href="javascript:void(0)" title="Pago">
-                                            <i class="glyphicon glyphicon-usd">                                    
-                                            </i>
-                                        </a>   
-                                        <a class = "add_membership" href="javascript:void(0)" 
-                                           title="Agregar Membresia">
-                                            <i class="glyphicon glyphicon-credit-card">                                    
-                                            </i>
-                                        </a>         
-                                    </td>                                
-                                </tr>  
-                            @endforeach   
+                                    </span>                                          
+                                    <a class ="edit_member" href="javascript:void(0)" 
+                                       title="Editar">
+                                        <i class="glyphicon glyphicon-edit">                                    
+                                        </i>
+                                    </a>
+                                    <a class ="delete_member" href="javascript:void(0)" 
+                                       title="Eliminar">
+                                        <i class="glyphicon glyphicon-remove">                                    
+                                        </i>
+                                    </a>                                      
+                                    <a class = "add_pay" href="javascript:void(0)" title="Pago">
+                                        <i class="glyphicon glyphicon-usd">                                    
+                                        </i>
+                                    </a>   
+                                    <a class = "add_membership" href="javascript:void(0)" 
+                                       title="Agregar Membresia">
+                                        <i class="glyphicon glyphicon-credit-card">                                    
+                                        </i>
+                                    </a>         
+                                </td>                                
+                            </tr>  
+                        @endforeach   
                         @endif    
                         </tbody>
-                    </table></div>
-                        </div>
-                        <div class="row">
-                        <div class="col-sm-6">
-                            <div class="dataTables_info" id="dataTables-example_info" role="status" aria-live="polite">Showing 1 to 10 of 57 entries
-                            </div>                                    
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="dataTables_paginate paging_simple_numbers" id="dataTables-example_paginate">
-                            <ul class="pagination">
-                            <li class="paginate_button previous disabled" aria-controls="dataTables-example" 
-                                tabindex="0" id="dataTables-example_previous"><a href="#">Previous</a></li>
-                            <li class="paginate_button active" aria-controls="dataTables-example" 
-                                tabindex="0"><a href="#">1</a></li>
-                            <li class="paginate_button " aria-controls="dataTables-example" 
-                                tabindex="0"><a href="#">2</a></li>
-                            <li class="paginate_button " aria-controls="dataTables-example" 
-                                tabindex="0"><a href="#">3</a></li>
-                            <li class="paginate_button " aria-controls="dataTables-example" 
-                                tabindex="0"><a href="#">4</a></li>
-                            <li class="paginate_button " aria-controls="dataTables-example" 
-                                tabindex="0"><a href="#">5</a></li>
-                            <li class="paginate_button " aria-controls="dataTables-example" 
-                                tabindex="0"><a href="#">6</a></li>
-                            <li class="paginate_button next" aria-controls="dataTables-example" 
-                                tabindex="0" id="dataTables-example_next"><a href="#">Next</a></li>
-                            </ul>
-                            </div>
-                        </div>
-                        </div></div>
+                    </table>
                 </div>
-                <!-- /.datatable-wrapper -->
-                <!-- /.table-responsive -->
             </div>
             <!-- /.panel-body -->
         </div>
@@ -485,11 +392,6 @@
                                 <div class="form-group">
                                     <label>Tipo de membres&iacute;a</label>
                                     <select id ="type_add_membership" class="form-control">
-                                        <!--option>Mensualidad Estudiante</option>
-                                        <option>Empresarial</option>
-                                        <option>Empresarial Junio/option>
-                                        <option>Mensualidad General</option>
-                                        <option>4to Miembro precio anterior</option-->
                                     </select>
                                 </div>
                                 <div class="form-group">
@@ -526,11 +428,18 @@
     </div>
 </div>
 
+</div>
 @stop
 
 @section('scripts')
 <script>
 $(document).ready(function() {        
+
+$('#dataTables-example').dataTable( {
+    paging: true,
+    searching: true,    
+    responsive: true
+} );  
 
 /*
  |------------------------------------------------------------------------
@@ -602,36 +511,36 @@ $('.add_pay').on('click', function(e) {
 });          
 
 function fiilModalPayment(id) {
-        $.ajax({
-            type: 'GET',
-            url: '{{ URL::to('/member/info_payment_wizard') }}' + '/' + id,
-            dataType: 'json',
-            success: function(d) {
-                $('#full_name_member_add_pay').html(d.first_name+" "+
-                        d.last_name+" "+d.second_last_name); 
-                var tbody = $('#tbody-memberships-actives');
+    $.ajax({
+        type: 'GET',
+        url: '{{ URL::to('/member/info_payment_wizard') }}' + '/' + id,
+        dataType: 'json',
+        success: function(d) {
+            $('#full_name_member_add_pay').html(d.first_name+" "+
+                    d.last_name+" "+d.second_last_name); 
+            var tbody = $('#tbody-memberships-actives');
 
-                var mems = d.memberships;
-                for (i = 0; i < mems.length; i++)
-                {
-                    tbody.append("<tr>"+
-                        "<td>"+mems[i].start+"</td>"+
-                        "<td>"+i+"</td>"+
-                        "<td>"+mems[i].membership_name+"</td>"+
-                        "<td>"+mems[i].price+"</td>"+
-                        "<td>"+mems[i].paid+"</td>"+
-                        "<td>"+0+"</td>"+
-                        "<td>"+0+"</td></tr>");
-                }                            
-            }
-        });
+            var mems = d.memberships;
+            for (i = 0; i < mems.length; i++)
+            {
+                tbody.append("<tr>"+
+                    "<td>"+mems[i].start+"</td>"+
+                    "<td>"+i+"</td>"+
+                    "<td>"+mems[i].membership_name+"</td>"+
+                    "<td>"+mems[i].price+"</td>"+
+                    "<td>"+mems[i].paid+"</td>"+
+                    "<td>"+0+"</td>"+
+                    "<td>"+0+"</td></tr>");
+            }                            
+        }
+    });
 }        
 
 $('#save_payment').on('click', function(e) {
     var data = {
         amount: $('#amount_add_payment').val(),                
         method_payment: $('#method_payment_add_payment').val(),
-        concept: "MEMBRESIA"
+        concept: "PAGO GENERAL"
     }, 
     id = $('#member_id_add_pay').text();
     $.ajax({

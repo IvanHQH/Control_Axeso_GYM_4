@@ -38,7 +38,6 @@
 </head>
 
 <body>
-
     <div class="container">
         <div class="row">
             <div class="col-md-4 col-md-offset-4">
@@ -47,23 +46,24 @@
                         <h3 class="panel-title">Por favor inicia sesión</h3>
                     </div>
                     <div class="panel-body">
-                        <form role="form">
-                            <fieldset>
-                                <div class="form-group">
-                                    <input class="form-control" placeholder="Nombre de usuario" name="email" type="email" autofocus>
-                                </div>
-                                <div class="form-group">
-                                    <input class="form-control" placeholder="Contraseña" name="password" type="password" value="">
-                                </div>
-                                <div class="checkbox">
-                                    <label>
-                                        <input name="remember" type="checkbox" value="Remember Me">Recordarme
-                                    </label>
-                                </div>
-                                <!-- Change this to a button or input when using this as a form -->
-                                <a href="quick_search" class="btn btn-lg btn-success btn-block">Iniciar sesión</a>
-                            </fieldset>
-                        </form>
+                        {{Form::open(array('url' => 'post_login','method'=>'post'))}}
+                        <fieldset>
+                            <div class="form-group">
+                                <input id="login-username" type="text" class="form-control" 
+                                       name="nick_name" value="ivan" placeholder="Nombre">                                        
+                            </div>
+                            <div class="form-group">
+                                <input id="login-password" type="password" class="form-control" 
+                                       name="password" placeholder="Contraseña" value="123" >
+                            </div>
+                            <div class="form-group">
+                                <input id="nameClient" type="text" class="form-control" 
+                                       name="name_client" placeholder="Nombre Cliente" value="le parc gym lomas" >                                              
+                            </div>                                                                                                    
+                            <button id="btn-login" type="btn btn-success" type="submit"
+                                class="btn btn-lg btn-success btn-block">Iniciar Sesión</button>       
+                        </fieldset>    
+                        {{ Form::close() }}
                     </div>
                 </div>
             </div>
@@ -89,5 +89,33 @@
     {{ HTML::script('assets/dist/js/sb-admin-2.js') }}    
 
 </body>
+
+<script>
+$(document).ready(function() {      
+/*
+$('#login').on('click', function() {
+    var data = {            
+        nick_name :$("#user_name").val(),
+        password :$("#password").val(),
+        name_client : 'le parc gym'
+    };
+    $.ajax({
+        type: "POST",
+        url: '{{ URL::to('/login') }}',
+        data: data,
+        success: function(data, textStatus, jqXHR) {     
+            if(data.success == true){
+                //alert('ok');
+                window.location.replace("http://rfid.dev/quick_seacrh/");
+            }
+            else{alert(data.errors);}                        
+        },
+        dataType: 'json'
+    });              
+    window.location.reload();      
+}); 
+*/
+});    
+</script>
 
 </html>

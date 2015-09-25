@@ -38,8 +38,7 @@ class MembershipController extends BaseController{
            $payment->amount = $input['amount'];
            $payment->method_payment = $input['method_payment'];
            $payment->concept = $input['concept'];
-           //$payment->user_id = Auth::user()->id;
-           $payment->user_id = 1;
+           $payment->turn_user_id = TurnUser::turnUserOpen(Auth::user()->branch_office_id)->id;
            $payment->save();                                                               
            
            $membership = new Membership();
@@ -52,6 +51,7 @@ class MembershipController extends BaseController{
                 $membership->membership_type_id = $membershipType[0]->id;
                 $membership->start = $input['start'];
                 $membership->active = 1;
+                $membership->user_id = Auth::User()->id;
                 $membership->save();
                 return Response::json(array(
                         'success' => true                   
@@ -62,7 +62,6 @@ class MembershipController extends BaseController{
         return Response::json(array(
             'error' => true
         ));                               
-    }
-    
+    }   
     
 }

@@ -23,7 +23,7 @@ class MemberController extends BaseController{
     public function info_payment_wizard($id)
     {
         $res = array();       
-        $res['memberships'] = DB::select('call member_with_membership_active('.$id.',1)');  
+        $res['memberships'] = DB::select('call member_with_membership_active('.$id.','.Auth::user()->branch_office_id.')');  
         $res = array_merge(Member::find($id)->toArray(),$res); 
         return Response::json($res);
     }    
@@ -129,7 +129,7 @@ class MemberController extends BaseController{
             ));             
         }   
         $memberId = $mem->id;
-        $idBranchOffice = 1;
+        $idBranchOffice = Auth::user()->branch_office_id;
         $member = array();
         $member['img_member'] = Member::pathPhoto($memberId);                        
         $member['txt_main'] = $mem->first_name." ".$mem->last_name." ".$mem->second_last_name;
@@ -144,12 +144,29 @@ class MemberController extends BaseController{
         ));                              
     }
     
+    public function get_assists_last($memberId)
+    {
+        $mem = $this->foundMember($memberId);
+        if( $mem == null ){            
+            return Response::json(array(                
+                'success' => false,
+                'errors' => 'Socio no encontrado'                                
+            ));             
+        }           
+        $member = array();
+        $member['assists_last'] = MethodsConstants::datesTimesStrEnglishToEspanishArray(
+                DB::select('call assists_last('.$memberId.','.Auth::user()->branch_office_id.')'));          
+        return Response::json(array(
+            'success' => true,
+            'member' => $member
+        ));            
+    }
+
     /*
      * Found member for id or part of the full name
      */
     private function foundMember($ident)
     {
-        $ident = "Herandez";
         $member = Member::find($ident);
         if( $member == null ){            
             $member = Member::whereIn('first_name', [$ident])->first();

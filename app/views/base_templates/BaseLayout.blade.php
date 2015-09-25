@@ -1,15 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>@yield('title', 'axeso')</title>
+    <title>@yield('title', 'HQH GYM')</title>
     
     {{-- Bootstrap --}}
     {{ HTML::style('assets/css/bootstrap.min.css', array('media' => 'screen')) }}
@@ -31,16 +29,23 @@
 
 <body>
     <div id="wrapper">
-        <!-- Navigation -->
-        <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
-            <div class="navbar-header">
+        <!-- Navigation -->        
+        <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">            
+            <div class="navbar-header">                
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                     <span class="sr-only">Toggle navigation</span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="index.html">Control de Accesos</a>
+                </button>                       
+                <a class="navbar-brand"><img src="/img/hqh.png" style="width:60px;height:25px;"></a>
+                <!--a class="navbar-brand"></a-->                
+                <a class="navbar-brand">
+                    <p class="text-info" style="font-size:15px">
+                        {{Auth::user()->first_name." ".Auth::user()->last_name." | Inicio de turno : "}}
+                        {{TurnUser::descripTurnUserOpen(Auth::user()->branch_office_id)}}
+                    </p> 
+                </a>                
             </div>
             <!-- /.navbar-header -->
             <ul class="nav navbar-top-links navbar-right">
@@ -62,23 +67,26 @@
                         <i class="fa fa-bell fa-fw"></i>  <i class="fa fa-caret-down"></i>
                     </a>
                     <!-- /.dropdown-alerts -->
+                </li>            
+                <li class="dropdown">
+                    <a href="logout"><i class="fa fa-sign-out fa-fw"></i> Cerrar sesión</a>
                 </li>
                 <!-- /.dropdown -->
-                <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                        <i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
-                    </a>
-                    <ul class="dropdown-menu dropdown-user">
-                        <li><a href="#"><i class="fa fa-user fa-fw"></i> Perfil de usuario</a>
-                        </li>
-                        <li><a href="#"><i class="fa fa-gear fa-fw"></i> Configuraci&oacuate;n</a>
-                        </li>
-                        <li class="divider"></li>
-                        <li><a href="login.html"><i class="fa fa-sign-out fa-fw"></i> Cerrar sesi�n</a>
-                        </li>
-                    </ul>
-                    <!-- /.dropdown-user -->
-                </li>
+                <!--li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
+                                <i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                                <li><a href="#"><i class="fa fa-user fa-fw"></i> User Profile</a>
+                                </li>
+                                <li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
+                                </li>
+                                <li class="divider"></li>
+                                <li><a href="login.html"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                                </li>
+                        </ul>
+                <!-- /.dropdown-user -->
+                </li-->
                 <!-- /.dropdown -->
             </ul>
             <!-- /.navbar-top-links -->    
@@ -88,7 +96,7 @@
                         <li>
                             <!--a href="/"><i class="fa fa-align-justify fa-fw"></i></a-->                           
                         </li>                        
-                        <li class="sidebar-search">
+                        <!--li class="sidebar-search">
                             <div class="input-group custom-search-form">
                                 <input type="text" class="form-control" placeholder="Buscar...">
                                 <span class="input-group-btn">
@@ -97,8 +105,7 @@
                                 </button>
                             </span>
                             </div>
-                            <!-- /input-group -->
-                        </li>
+                        </li-->
                         <li>
                             <a href="quick_search"><i class="fa fa-user fa-fw"></i> Busqueda r&aacute;pida</a>
                         </li>
@@ -159,12 +166,24 @@
                                 <li>
                                     <a href="turner_cash">Cortes</a>
                                 </li>                      
-                                <li>
+                                <!--li>
                                     <a href="settings_turner_cash">Ajustes</a>
-                                </li>                                                      
+                                </li-->                                                      
                             </ul>
                             <!-- /.nav-memberships-level -->
-                        </li>                          
+                        </li>                  
+                        <li>
+                            <a href="#"><i class="fa fa-check fa-fw"></i> Asistencias<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">                             
+                                <li>
+                                    <a href="assists_list">Listado</a>
+                                </li>                                                                           
+                                <!--li>
+                                    <a href="settings_turner_cash">Ajustes</a>
+                                </li-->                                                      
+                            </ul>
+                            <!-- /.nav-memberships-level -->
+                        </li>                         
                     </ul>
                 </div>
                 <!-- /.sidebar-collapse -->

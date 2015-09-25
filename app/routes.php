@@ -24,6 +24,7 @@ Route::post('member/{memberId?}','MemberController@store');
 Route::delete('member/{memberId}','MemberController@delete');
 Route::get('member/{memberId}','MemberController@get');
 Route::get('member/quick_search/{ident}','MemberController@get_quick_search');
+Route::get('member/assists_last/{ident}','MemberController@get_assists_last');
 /*
 |------------------------------------------------------------------------
 | Routes Memberships
@@ -54,7 +55,7 @@ Route::get('unavailable_memberships_types', 'MembershipTypeController@unavailabl
 |------------------------------------------------------------------------
 */
 
-Route::get('memberships_paymets', 'PaymentController@payments_list');
+Route::get('memberships_paymets/{params?}', 'PaymentController@payments_list');
 Route::post('/payment/{memberId?}', 'PaymentController@store');
 Route::post('/payment/edit/{paymentId?}', 'PaymentController@store_edit');
 Route::get('payment/{paymentId}','PaymentController@get');
@@ -81,15 +82,29 @@ Route::get('/', function(){
     return View::make('login.login');
 });
 
+Route::get('/login', function(){
+    return View::make('login.login');
+});
+
+Route::get('/logout',  function () { 
+    Auth::logout();
+    return Redirect::to('/login');      
+});
+
+Route::post('post_login','MethodsConstantsController@login');
+
+Route::get('profile', array('as' => 'profile', function () { }));   
+
 /*
 |------------------------------------------------------------------------
 | Routes Visitors
 |------------------------------------------------------------------------
 */
 
-Route::get('/visitors_list', function(){
-	return View::make('visitors.visitors_list');
-});
+Route::get('/visitors_list/{params?}','VisitorController@visitors_list');
+Route::post('/visitor/{visitorId?}', 'VisitorController@store');
+Route::get('/visitor/{visitorId}','VisitorController@get');
+Route::delete('/visitor/{visitorId}','VisitorController@delete');
 
 /*
 |-------------------------------------------------------------------------
@@ -97,21 +112,37 @@ Route::get('/visitors_list', function(){
 |-------------------------------------------------------------------------
 */
 
-Route::get('/incomes', function(){
-	return View::make('cashbox.income');
-});
+Route::get('/incomes/{params?}','IncomeMController@incoms_list');
+Route::post('/income_ms/{incomeId?}','IncomeMController@store');
+Route::get('/income/{incomeId}','IncomeMController@get');
+Route::delete('/income_ms/{incomeId}','IncomeMController@delete');
 
-Route::get('/turner_cash', function(){
-	return View::make('cashbox.cash_out');
-});
+Route::get('/outcomes','OutcomeMController@outcoms_list');
+Route::post('/outcome_ms/{outcomeId?}','OutcomeMController@store');
+Route::get('/outcome/{outcomeId}','OutcomeMController@get');
+Route::delete('/outcome_ms/{outcomeId}','OutcomeMController@delete');
+Route::get('/close_box','TurnUserController@close_box');
 
-Route::get('/outcomes', function(){
-	return View::make('cashbox.expenses');
-});
+/*
+|------------------------------------------------------------------------
+| Routes Turn Users
+|------------------------------------------------------------------------
+*/
 
-Route::get('/settings_turner_cash', function(){
-	return View::make('cashbox.adjustments');
-});
+Route::get('/turn_users/{branchOfficeId}', 'TurnUserController@turn_users_list');
+Route::get('/turn_user/{turnUserId}', 'TurnUserController@turn_user_detail');
+Route::get('/turner_cash','TurnUserController@summary_boxcut');
+///turn_user/create
+Route::post('/turn_user/create','TurnUserController@store');
+/*
+|-------------------------------------------------------------------------
+| Routes Assits
+|-------------------------------------------------------------------------
+*/
+
+Route::post('/assist/{memberId}','AssistController@store');
+Route::get('/assists_list/{params?}','AssistController@assists_list');
+Route::delete('/assist/{assistId}','AssistController@delete');
 
 /*
 |-------------------------------------------------------------------------
@@ -136,5 +167,5 @@ Route::get('/test', function(){
         $array = array('name_day'=>$dtt[0],'number_day'=>$dtt2[0],'month'=>$dtt2[1],'year'=>$dtt2[2],'time'=>$dtt[2]);
         array_push($dateTimesArray, $array);
     }
-    return Response::json($dateTimesArray);    */     
+    return Response::json($dateTimesArray);    */ 
 });
