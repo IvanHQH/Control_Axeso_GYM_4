@@ -33,31 +33,50 @@
         <table class="table table-striped table-bordered table-hover" id="dataTables-example">
             <thead>
                 <tr>
-                <th>Nombre</th>
-                <th>Apellido Paterno</th>
-                <th>Apellido Materno</th>
+                <th style="width: 40px">Id</th>
+                <th>Nombre Completo</th>
                 <th>Fecha/Hora</th>
-                <th>Turno</th>
+                @if(Auth::user()->type == 1) 
                 <th style="width: 60px;"><font color ='white'>....</font> </th>
+                @endif
                 </tr>
             </thead>
             <tbody>
-                @if(isset($assists))
-                    @foreach($assists as $assist)
+                @if(isset($members))
+                    @foreach($members as $member)
                     <tr class="odd gradeX">
-                        <td>{{$assist->first_name}}</td>
-                        <td>{{$assist->last_name}}</td>
-                        <td>{{$assist->second_last_name}}</td>                                                
-                        <td class="center">{{$assist->created_at}}</td>
-                        <td class="center">{{$assist->turn}}</td>
+                        <td>{{$member->id}}</td>                        
+                        <td>{{$member->first_name}}&nbsp;{{$member->last_name}}&nbsp;{{$member->second_last_name}}</td>                                                                    
+                        <td class="center">{{$member->created_at}}</td>
+                        @if(Auth::user()->type == 1) 
                         <td style="text-align: center; vertical-align: middle; ">
                             <span class="assist-id" style="display: none">
-                                {{$assist->id}}
+                                {{$member->id}}
                             </span>                              
                             <a class="delete_assist" title="Remove" style="cursor:pointer">
                                 <i class="glyphicon glyphicon-remove"></i>
                             </a>
                         </td>
+                        @endif
+                    </tr>                    
+                    @endforeach
+                @endif
+                @if(isset($visitors))
+                    @foreach($visitors as $visitor)
+                    <tr class="odd gradeX">
+                        <td>{{$visitor->id}}</td>                        
+                        <td>{{$visitor->full_name}}</td>
+                        <td class="center">{{$visitor->created_at}}</td>
+                        @if(Auth::user()->type == 1) 
+                        <td style="text-align: center; vertical-align: middle; ">
+                            <span class="assist-id" style="display: none">
+                                {{$visitor->id}}
+                            </span>                              
+                            <a class="delete_assist" title="Remove" style="cursor:pointer">
+                                <i class="glyphicon glyphicon-remove"></i>
+                            </a>
+                        </td>
+                        @endif
                     </tr>                    
                     @endforeach
                 @endif
@@ -80,27 +99,29 @@ $(document).ready(function() {
 $('#dataTables-example').DataTable({
     paging: true,
     searching: true,    
-    responsive: true
+    responsive: true,
+    "aaSorting": [[0, 'desc']],
+    "language": {"url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json"}
 });    
 
 $('.delete_assist').on('click', function() {
-    if (!confirm('Desea borrar la asistencia?')) {
+    if (!confirm('¿Desea borrar la asistencia?')) {
         return false;
     }
     var o = $(this),
     id = o.parents('td:first').find('span.assist-id').text(); 
     $.ajax({
-        type: "DELETE",
-        url: '{{ URL::to('/assist') }}' + '/' + id,
+        type: "POST",
+        url: '{{ URL::to('/assist/delete') }}' + '/' + id,
         success: function(data, textStatus, jqXHR) {                        
             if(data.success == true){
-                window.location.reload();
+                alert('¡Asistencia eliminada!');
+                window.location.replace("/crm_gym/public/assists_list");
             }
             else{alert(data.errors);}                        
         },
         dataType: 'json'
-    });              
-    window.location.reload();     
+    });                
 });
 
 $('#show_between_dates').on('click', function() {
@@ -110,7 +131,7 @@ $('#show_between_dates').on('click', function() {
     var params;
     params = init.value+"+"+end.value;
 
-    window.location.replace("http://axeso_gym.dev/assists_list/"+params);
+    window.location.replace("assists_list/"+params);
 });  
 
 });

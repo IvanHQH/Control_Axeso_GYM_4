@@ -28,9 +28,10 @@
                         <thead>
                             <!-- headers-columns -->
                             <tr role="row">
+                                <th style="width: 50px">Id</th>
                                 <th>Nombre</th>
                                 <th>Fecha Creada</th>
-                                <th>Creada Por</th>
+                                <!--th>Creada Por</th-->
                                 <th>Precio</th>
                                 <th>Duración</th>
                             </tr>
@@ -40,11 +41,12 @@
                         @if(isset($membershipTypesUnavailabes))       
                         @foreach($membershipTypesUnavailabes as $memshipType) 
                             <tr class="gradeA odd" role="row">
-                                <td class="sorting_1">{{$memshipType->name}}</td>
+                                <td>{{$memshipType->id}}</td>
+                                <td>{{$memshipType->name}}</td>
                                 <td>{{$memshipType->created_at}}</td>
-                                <td class="center">{{$memshipType->price}}</td>
-                                <td class="center">{{$memshipType->duration}}</td>
-                                <td>{{$memshipType->available_until}}</td>
+                                <td>${{$memshipType->price}}</td>
+                                <td>{{$memshipType->duration}} días</td>
+                                <!--td>{{$memshipType->available_until}}</td-->
                             </tr>                                                
                         @endforeach
                         @endif  
@@ -71,7 +73,9 @@ $(document).ready(function() {
 $('#dataTables-example').dataTable( {
     paging: true,
     searching: true,    
-    responsive: true
+    responsive: true,
+    "aaSorting": [[0, 'desc']],
+    "language": {"url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json"}
 } ); 
 
 });              

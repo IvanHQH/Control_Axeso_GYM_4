@@ -32,48 +32,89 @@ class IncomeMController extends BaseController{
             $end_dt_aux = $aux[0] . "-" . $aux[1] . "-" .$aux[2];            
             
             $init_dt .= " 00:00:00";
-            $end_dt .= " 00:00:00";              
-            $incomes = DB::select("call incomes('".$init_dt."','".$end_dt."')");  
+            $end_dt .= " 23:59:59";              
+            $incomes = DB::select("call incomes('".$init_dt."','".$end_dt."',".Auth::user()->branch_office_id.")");  
         } catch (Exception $e) {
-            $incomes = DB::select("call incomes('0000-01-01 00:00:00','3000-01-01 00:00:00')");
+            $incomes = DB::select("call incomes('0000-01-01 00:00:00','3000-01-01 00:00:00',".Auth::user()->branch_office_id.")");
         }
 
         return View::make('cashbox.income',['incomes'=>$incomes,'date_init'=>$init_dt_aux,'date_end'=>$end_dt_aux]);
     }       
     
-    public function store($incomeId)
-    {
+    public function store()
+    {               
+        $validator = Validator::make(Input::all(),
+            array(              
+                'metodo_de_pago' => 'required|regex:([a-zA-Z ñáéíóú]{2,30})',
+                'referencia' => 'alpha_num'
+            )
+        );  
+
+        if ($validator->fails())
+            return Response::json(array('success'=>false,'errors'=>$validator->messages()->all()));  
+
+        $turnId = TurnUser::currentTurnId();
+        if($turnId == null)
+            return Response::json(array('success'=>false,'errors'=>'NO TURN'));                                     
         
-        $incomem = new IncomeM();
-        
-        $input = Input::All();                
-        if($incomeId != 0){
-            $incomed = IncomeD::find($incomeId);
-            if($incomed == null)
-                return Response::json(array('success' => false,
-                    'errors'=>'income not found'));                 
-        }else{
-            $incomed = new IncomeD();   
-            
-            $incomem->turn_users_id = TurnUser::turnUserOpen(Auth::user()->branch_office_id)->id;
-            $incomem->total = $input['amount'];
-            $incomem->save();  
-            
-            $incomed->income_ms_id = $incomem->id;
+        $input = Input::All(); 
+        $nfc = false;
+        if($input['member_id'] != 0){
+            $member = Member::find($input['member_id']);
+            if($member->credit < $input['total']){
+                $errors = array();
+                $errors[0] = "CrÃ©dito insuficiente";
+                return Response::json(array('success'=>false,'errors'=>$errors)); 
+            }
+            $member->credit = $member->credit - $input['total'];
+            $member->save();
+            $nfc = true;
         }
-        //DB::transaction(function($input) use ($input) {              
-            
-            $incomed->description = $input['description'];
-            $incomed->subtotal = $input['amount'];
-            $incomed->save();        
-            
-            return Response::json(array(
-                    'success' => true                   
-            ));               
-        /*});     
+
+        $incomem = new IncomeM();                               
+        $incomem->turn_users_id = TurnUser::currentTurnId();
+        $incomem->total = $input['total'];
+
+        if($input['member_id'] != 0)            
+            $incomem->method_payment = 'NFC';
+        else
+             $incomem->method_payment = $input['metodo_de_pago'];
+
+        $incomem->reference = $input['referencia']; 
+        $incomem->created_at = MethodsConstants::dateTimeMexicoCenter(date("Y-m-d H:i:s"));
+        if($nfc == true)
+            $incomem->nfc_payment = 1;
+        else $incomem->nfc_payment = 0;
+        $incomem->save();          
+
+        try{
+            if (Input::has('products')) {
+                $prods = Input::get('products');
+                if (!is_array($prods)) {
+                    $prods = array($prods);
+                }
+                foreach ($prods as $e) {
+                    $incomed = new IncomeD();
+                    $prod = Product::where('code',$e[0])->first();
+                    $prod->stock = $prod->stock - intval($e[1]);
+                    $prod->save();
+                    $incomed->product_id = $prod->id;
+                    $incomed->description = $prod->name;
+                    $incomed->quantity = intval($e[1]);
+                    $incomed->subtotal = intval($e[1])*$prod->price;
+                    $incomed->created_at = MethodsConstants::dateTimeMexicoCenter(date("Y-m-d H:i:s"));
+                    $incomed->income_ms_id = $incomem->id;
+                    $incomed->save();
+                }
+            }        
+            return Response::json(array('success'=>true));
+        }catch(Exception $e){
+            return Response::json(array('success'=>false,'errors'=>$e->getMessage()));
+        }        
+
         return Response::json(array(
-                'success' => false,'errors'=>'error'                   
-        ));    */        
+                'success' => true                   
+        ));                     
     }    	
     
     public function get($incomeId)
@@ -89,12 +130,12 @@ class IncomeMController extends BaseController{
     
     public function delete($incomeId)
     {
-        $incomed = IncomeD::find($incomeId);
-        if($incomed == null)
-            return Response::json(array('success'=>false,'errors'=>'income not found'));
-        DB::transaction(function ($incomed) use ($incomed) {
-            IncomeD::where('income_ms_id',$incomed->income_ms_id)->delete();
-            IncomeM::find($incomed->income_ms_id)->delete();            
+        $incomem = IncomeD::find($incomeId);
+        if($incomem == null)
+            return Response::json(array('success'=>false,'errors'=>'Ingreso no encontrado'));
+        DB::transaction(function ($incomem) use ($incomem) {
+            IncomeD::where('income_ms_id',$incomem->income_ms_id)->delete();
+            IncomeM::find($incomem->income_ms_id)->delete();            
         }); 
         return Response::json(array('success'=>true));
     }

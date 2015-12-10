@@ -13,24 +13,11 @@
  */
 class Membership extends BaseModel{
     //put your code here
-    public function setIsActiveMembership()
-    {
-        $memt = MembershipType::find($this->membership_type_id);
-        if($memt != null){
-            $fecha = date_create($this->created_at);
-            date_add($fecha, date_interval_create_from_date_string($memt->duration.' days'));
-            
-            $expiration = date_create($fecha);
-            $availableUntil = date_create($memt->available_until);
-            
-            if($expiration < $availableUntil ){
-                $this->active = 0;
-                return false;
-            }else{
-                $this->active = 1;
-                return true;
-            }               
-        }
-        return false;
+    
+    public function end_period($date,$memshipTypeId){
+        $memshipType = MembershipType::find($memshipTypeId);
+        $period = $memshipType->duration + " days";
+        
     }
+    
 }

@@ -28,7 +28,8 @@ class AssistController extends BaseController{
             return Response::json(array('success'=>true));            
         }
         else{
-            return Response::json(array('success'=>false,'errors'=>'No hay turno habilitado. ¿Desea crear un nuevo turno?')); 
+            return Response::json(array('success'=>false,
+                'errors'=>'No hay turno habilitado. ¿Desea crear un nuevo turno?')); 
         } 
     }
     
@@ -52,20 +53,23 @@ class AssistController extends BaseController{
             $end_dt_aux = $aux[0] . "-" . $aux[1] . "-" .$aux[2];            
             
             $init_dt .= " 00:00:00";
-            $end_dt .= " 00:00:00";   
-            $assists = DB::select("call assists('".$init_dt."','".$end_dt."')");
+            $end_dt .= " 23:59:59";   
+
+            $members = DB::select("call assists('".$init_dt."','".$end_dt."',".Auth::user()->branch_office_id.")");
+            $visitors = DB::select("call assists_visitors('".$init_dt."','".$end_dt."',".Auth::user()->branch_office_id.")");
         } catch (Exception $e) {
-            $assists = DB::select("call assists('0000-01-01 00:00:00','3000-01-01 00:00:00')");
+            $members = DB::select("call assists('0000-01-01 00:00:00','3000-01-01 00:00:00',".Auth::user()->branch_office_id.")");
+            $visitors = DB::select("call assists_visitors('0000-01-01 00:00:00','3000-01-01 00:00:00',".Auth::user()->branch_office_id.")");
         }
-        
-        return View::make('assists.assists_list',['assists'=>$assists]);          
+                
+	return View::make('assists.assists_list',['members'=>$members,'visitors'=>$visitors]);       
     }
     
     public function delete($assistId)
     {
         $assist = Assist::find($assistId);
         if($assist == null)
-            return Response::json(array('success'=>false,'errors'=>'assistance not found'));
+            return Response::json(array('success'=>false,'errors'=>'Aisistencia no encontrada'));
         $assist->delete();            
         return Response::json(array('success'=>true));        
     }

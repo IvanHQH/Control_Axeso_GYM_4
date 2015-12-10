@@ -16,7 +16,9 @@ class MembershipTypeController extends BaseController {
 	 
     public function membership_types_list()
     {
-        $membershipTypes = MembershipType::all();
+        //$membershipTypes = MembershipType::all();
+        //membershyp_types
+        $membershipTypes = DB::select('call membershyp_types('.Auth::user()->branch_office_id.')'); 
         return View::make('membership_types.membership_types_list',['membershipTypes'=>$membershipTypes]);         
     }    
     
@@ -27,8 +29,18 @@ class MembershipTypeController extends BaseController {
     
     public function store($membershipTypeId)
     {
-        /*$fecha = DateTime::createFromFormat('Y-m-d', $input['available_until']);
-        $membershipType->available_until =  $fecha->format('Y-m-d H:i:s');  */
+
+        $validator = Validator::make(Input::all(),
+            array(
+                'nombre' => 'required|regex:([a-zA-Z ñáéíóú]{2,30})',    
+                'habilitada_hasta' => 'required|date',
+                'precio' => 'required|regex:([0-9]+(\.[0-9][0-9]?)?)',
+                'duracion' => 'required|numeric'           
+            )
+        );        
+        if ($validator->fails())
+            return Response::json(array('success'=>false,'errors'=>$validator->messages()->all()));         
+        
         $input = Input::All();
         $membershipType = null;
         if($membershipTypeId == 0)
@@ -37,28 +49,16 @@ class MembershipTypeController extends BaseController {
             $membershipType = MembershipType::find($membershipTypeId);        
             if($membershipType == null){
                 return Response::json(
-                        array('succes'=>false,'errors'=>'membership type not found')
+                        array('succes'=>false,'errors'=>'tipo de membresia no encontrada')
                 );                
             }   
         }            
-        $membershipType->name = $input['name'];                                  
-        $membershipType->available_until= $input['available_until'];                                                     
-        $membershipType->price= $input['price'];         
-        $membershipType->duration= $input['duration'];
-        
-        /*
-            $fecha = DateTime::createFromFormat('Y-m-d', '2015-08-14');
-            echo $fecha->format('Y-m-d H:i:s');      
-            echo date("Y-m-d H:i:s");  
-         */
-        //$fecha = DateTime::createFromFormat('d-m-Y', date("Y-m-d H:i:s"));
-        /*$now = date('d-m-Y');
-        $date = $input['available_until'];
-        if(strtotime($date)<strtotime($now))
-           echo '1 is small='.strtotime($date1).','.$date1;
-        else
-           echo '2 is small='.strtotime($date2).','.$date2;  */      
-        
+        $membershipType->name = $input['nombre'];                                  
+        $membershipType->available_until= $input['habilitada_hasta'];                                                     
+        $membershipType->price= $input['precio'];         
+        $membershipType->duration= $input['duracion'];
+        $membershipType->branch_office_id = Auth::user()->branch_office_id;           
+        $membershipType->created_at = MethodsConstants::dateTimeMexicoCenter(date("Y-m-d H:i:s"));
         $membershipType->save(); 
         return Response::json(array('success'=>true));                
     }    
@@ -78,28 +78,48 @@ class MembershipTypeController extends BaseController {
     }
     
     public function get($membeshipTypeId)
-    {
+    {        
         $membershipType = MembershipType::find($membeshipTypeId);
         if($membershipType != null){
+            $aux = explode(" ", $membershipType->available_until);
+            //echo $aux[0];die();
+            $aux = explode("-", $aux[0]);
+            $membershipType->available_unitl = $aux[0] . '-' . $aux[1] . '-' . $aux[2];              
+            
             return Response::json(
                     array('success'=>true, 'membership_type'=>$membershipType)
             );            
         }
-        return Response::json(
-                array('success'=>false,'errors'=>'membership type not found')
-        );
+        return Response::json(array('success'=>false,'errors'=>'membership type not found'));
     }    
+    
+    public function get_for_name($name)
+    {
+        $membershipType = MembershipType::where("name",$name)->
+                where("branch_office_id",Auth::user()->branch_office_id)->first();
+        if($membershipType != null){
+            $aux = explode(" ", $membershipType->available_until);
+            //echo $aux[0];die();
+            $aux = explode("-", $aux[0]);
+            $membershipType->available_unitl = $aux[0] . '-' . $aux[1] . '-' . $aux[2];              
+            
+            return Response::json(
+                    array('success'=>true, 'membership_type'=>$membershipType)
+            );            
+        }
+        return Response::json(array('success'=>false,'errors'=>'membership type not found'));        
+    }
     
     public function available_memberships_types()
     {
-        $membershipTypesAvailabes = DB::select('call membershyp_types_availables(true)'); 
+        $membershipTypesAvailabes = DB::select('call membershyp_types_availables(true,'.Auth::user()->branch_office_id.')'); 
         return View::make('membership_types.available_memberships_types',
             ['membershipTypesAvailabes'=>$membershipTypesAvailabes]);
     }
 
     public function unavailable_memberships_types()
     {
-        $membershipTypesUnavailabes = DB::select('call membershyp_types_availables(false)'); 
+        $membershipTypesUnavailabes = DB::select('call membershyp_types_availables(false,'.Auth::user()->branch_office_id.')'); 
         return View::make('membership_types.unavailable_memberships_types',
             ['membershipTypesUnavailabes'=>$membershipTypesUnavailabes]);     
     }    

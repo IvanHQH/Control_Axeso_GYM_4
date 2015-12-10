@@ -19,23 +19,25 @@
                     </select>
                 </div>
                 <div class="col-md-2">
-                    <label for="sel1">Corte de caja</label>
-                    <button id="btn_close_box" type="button" class="btn btn-outline btn-primary">Cerrar caja</button>
+                    <!--label for="sel1">Corte de caja</label>
+                    <button id="btn_close_box" type="button" class="btn btn-outline btn-primary">
+                    Cerrar turno</button-->
                 </div> 
                 <div class="col-md-2">
-                    <label for="sel1">Gasto</label>
+                    <!--label for="sel1">Gasto</label>
                     <button id="modal-410139" href="#modal-container-410139" role="button" 
                             type="button" class="btn btn-outline btn-primary" data-toggle="modal">
-                        Agregar gasto
-                    </button>
+                        Agregar egreso
+                    </button-->
                 </div>
                 <div class="col-md-2">
-                    <label for="sel1">Ingreso</label>
-                    <button id="modal-410139" href="#modal-container-41013" role="button" type="button" class="btn btn-outline btn-primary" data-toggle="modal">Agregar Ingreso</button>
+                    <!--label for="sel1">Ingreso</label>
+                    <button id="modal-410139" href="#modal-container-41013" role="button" type="button" class="btn btn-outline btn-primary" data-toggle="modal">
+                        Agregar Ingreso</button-->
                 </div>
                 <div class="col-md-2">
-                    <label for="sel1">Exportar</label>
-                    <button type="button" class="btn btn-outline btn-primary">Exportar a excel</button>
+                    <!--label for="sel1">Exportar</label>
+                    <button type="button" class="btn btn-outline btn-primary">Exportar a excel</button-->
                 </div>
             </div>
         </div>
@@ -66,14 +68,14 @@
                             00/00/0000                                                                   
                         </p>
                     <label for="sel1">Hora de cierre:</label>
-                        <p id="time_created_at">
-                            00/00/0000                                                               
+                        <p id="time_close">
+                            00:00:00                                                               
                         </p>
                     <label for="sel1">Dinero retirado:</label>
                         <p id="money_withdrawn">
                             $0.00                                                               
                         </p>
-                    <label for="sel1">Se dejó en caja:</label>
+                    <label for="sel1">Apertura de caja:</label>
                         <p id="money_left">
                             $0.00                                                              
                         </p>
@@ -101,34 +103,46 @@
                                     </td>
                                 </tr>
                                 <tr class="even gradeC">
-                                    <td>Venta de membresías</td>
+                                    <td>Venta membres&iacute;as e inscripciones efectivo</td>
                                     <td id="sales_membership">$0.00</td>
                                 </tr>
+                                <tr class="even gradeC">
+                                    <td>Venta membres&iacute;as e inscripciones electronico</td>
+                                    <td id="sales_membership_bank">$0.00</td>
+                                </tr>           
+                                <tr class="even gradeC">
+                                    <td>Abonos cr&eacute;ditos NFC</td>
+                                    <td id="payments_credit_nfc">$0.00</td>
+                                </tr>     
                                  <tr class="odd gradeX">
-                                    <td>Venta de casilleros</td>
-                                    <td id="sales_lockers">$0.00</td>
-                                </tr>
-                                 <tr class="odd gradeX">
-                                    <td>Venta de productos</td>
+                                    <td>Venta productos efectivo</td>
                                     <td id="sales_products">$0.00</td>
                                 </tr>
+                                <tr class="odd gradeX">
+                                    <td>Ventas productos electronico</td>
+                                    <td id="payments_bank">$0.00</td>
+                                </tr>   
                                  <tr class="odd gradeX">
-                                    <td>Venta de visitas (Pago de invitados)</td>
-                                    <td id="sales_visits">$0.00</td>
+                                    <td>Ventas de visitas Efectivo</td>
+                                    <td id="sales_visits_cash">$0.00</td>
                                 </tr>
                                  <tr class="odd gradeX">
-                                    <td>Suma total de ventas</td>
+                                    <td>Ventas de visitas Electronico</td>
+                                    <td id="sales_visits_bank">$0.00</td>
+                                </tr>
+                                 <tr class="odd gradeX">
+                                    <td>Suma total ventas</td>
                                     <td id="total_sales">$0.00</td>
                                 </tr>
-                                <tr class="odd gradeX">
+                                <!--tr class="odd gradeX">
                                     <td>Adeudos y créditos</td>
                                     <td id="debits_credits">$0.00</td>
-                                </tr>
+                                </tr-->
                                 <tr class="odd gradeX">
-                                    <td>Salidas</td>
+                                    <td>Egresos</td>
                                     <td id="buys">$0.00</td>
                                 </tr>                                
-                                 <tr class="odd gradeX">
+                                <!--tr class="odd gradeX">
                                     <td>Suma total de dinero recibido</td>
                                     <td id="total_money_received">$0.00</td>
                                 </tr>
@@ -139,12 +153,13 @@
                                 <tr class="odd gradeX">
                                     <td>Suma de gastos de caja (Egresos)</td>
                                     <td id="adjust_box_outcome">$0.00</td>
-                                </tr>
+                                </tr-->
+                                <tr class="odd gradeX" style="background-color: #d9edf7">
+                                    <td>DINERO EN CAJA</td>
+                                    <td id="money_in_box">$0.00</td>
+                                </tr>                                
                             </tbody>
                     </table>
-                </div>
-                <div class="panel-footer">
-                     <h3 id="money_in_box" style="margin-left:420px;" for="sel1">DINERO EN CAJA $0.00</h3>
                 </div>
             </div>
         </div>
@@ -160,11 +175,11 @@
             </div>
             <div class="modal-body">                
                 <div class="form-group">
-                    <label for="description">Descripción del egreso:</label>
+                    <label for="description">* Descripción del egreso:</label>
                     <input type="text" class="form-control" id="outcome_description" placeholder="descripción del egreso">
                 </div>
                 <div class="form-group">
-                    <label for="cantidad">Cantidad:</label>
+                    <label for="cantidad">* Cantidad:</label>
                     <input type="text" class="form-control" id="outcome_amount" placeholder="Cantidad">
                 </div>
             </div>
@@ -185,11 +200,11 @@
                 </div>
                 <div class="modal-body">                                                       
                     <div class="form-group">
-                        <label for="description">Descripción del ingreso:</label>
+                        <label for="description">* Descripción del ingreso:</label>
                         <input type="text" class="form-control" id="income_description" placeholder="descripción del ingreso">
                     </div>
                     <div class="form-group">
-                        <label for="cantidad">Cantidad</label>
+                        <label for="cantidad">* Cantidad</label>
                         <input type="text" class="form-control" id="income_amount" placeholder="Cantidad">
                     </div>
                 </div>
@@ -211,11 +226,12 @@ $(document).ready(function() {
     
     $.ajax({
         type: 'GET',
-        url: '{{ URL::to('/turn_users') }}' + '/' + 1,
+        url: '{{ URL::to('/turn_users') }}',
         dataType: 'json',
         success: function(d) {        
             var select = $('#turn_users');
             var turns = d.boxcuts;
+            select.append("<option value='-1'></option>");
             for (i = 0; i < turns.length; i++)
             {
                 if(turns[i].date_time_out != null)
@@ -234,8 +250,8 @@ $(document).ready(function() {
     
     $('#save_outcome').on('click', function() {
         var data = {            
-            description :$("#outcome_description").val(),
-            amount :$("#outcome_amount").val()                      
+            descripcion :$("#outcome_description").val(),
+            cantidad :$("#outcome_amount").val()                      
         }; 
         id = 0;
         $.ajax({
@@ -246,7 +262,29 @@ $(document).ready(function() {
                 if(data.success == true){
                     window.location.reload();
                 }
-                else{alert(data.errors);}                        
+                else{
+                    if(data.errors == 'NO TURN'){
+                        if (!confirm('¿No hay turno habilitado. ¿Desea crear un nuevo turno?'))
+                                return false;   
+                        $.ajax({
+                            type: "POST",
+                            url: '{{ URL::to('/turn_user/create') }}',
+                            success: function(d, textStatus, jqXHR) {  
+                                if(d.success == true){   
+                                    alert('¡Turno Agregado!');     
+                                    window.location.reload();
+                                }
+                                else{alert(d.errors);}                        
+                            },
+                            dataType: 'json'
+                        });                         
+                    }else{
+                        var txt = "Errores de validación : \n";                
+                        for (i = 0; i < data.errors.length; i++)
+                            txt = txt+'\n'+data.errors[i];
+                        alert(txt);                    
+                    }                      
+                }                        
             },
             dataType: 'json'
         });              
@@ -255,8 +293,8 @@ $(document).ready(function() {
     
     $('#save_income').on('click', function() {
         var data = {            
-            description :$("#income_description").val(),
-            amount :$("#income_amount").val()                      
+            descripcion :$("#income_description").val(),
+            cantidad :$("#income_amount").val()                      
         }; 
         id = 0;
         $.ajax({
@@ -267,7 +305,29 @@ $(document).ready(function() {
                 if(data.success == true){
                     window.location.reload();
                 }
-                else{alert(data.errors);}                        
+                else{
+                    if(data.errors == 'NO TURN'){
+                        if (!confirm('¿No hay turno habilitado. ¿Desea crear un nuevo turno?'))
+                                return false;   
+                        $.ajax({
+                            type: "POST",
+                            url: '{{ URL::to('/turn_user/create') }}',
+                            success: function(d, textStatus, jqXHR) {  
+                                if(d.success == true){   
+                                    alert('¡Turno Agregado!');     
+                                    window.location.reload();
+                                }
+                                else{alert(d.errors);}                        
+                            },
+                            dataType: 'json'
+                        });                         
+                    }else{
+                        var txt = "Errores de validación : \n";                
+                        for (i = 0; i < data.errors.length; i++)
+                            txt = txt+'\n'+data.errors[i];
+                        alert(txt);                    
+                    }                      
+                }                        
             },
             dataType: 'json'
         });              
@@ -275,24 +335,25 @@ $(document).ready(function() {
     });         
     
     $('#btn_close_box').on('click', function() {
-        if (!confirm('¿Desea cerrar el turno de caja?')) {
-            return false;
-        }
-        $.ajax({
-            type: "GET",
-            url: '{{ URL::to('/close_box') }}',
-            success: function(data, textStatus, jqXHR) {                        
-                if(data.success == true){
-                    alert("Cierre de caja realizado!");
-                    window.location.reload();
-                }
-                else{
-                    alert(data.errors);
-                    window.location.reload(); 
-                }                        
-            },
-            dataType: 'json'
-        });                          
+        if(document.getElementById('turn_users').selectedIndex != 0){
+            if (!confirm('¿Desea cerrar el turno de caja?'))
+                return false;      
+            $.ajax({
+                type: "GET",
+                url: '{{ URL::to('/close_box') }}',
+                success: function(data, textStatus, jqXHR) {                        
+                    if(data.success == true){
+                        alert("Cierre de caja realizado!");
+                        window.location.reload();
+                    }
+                    else{
+                        alert(data.errors);
+                        window.location.reload(); 
+                    }                        
+                },
+                dataType: 'json'
+            });                
+        }                      
     });    
     
 }); 
@@ -300,6 +361,7 @@ $(document).ready(function() {
 function changeSelectTurn(obj)
 {
     var turnUserId = obj.value
+    if(turnUserId != -1){
     $.ajax({
         type: 'GET',
         url: '{{ URL::to('/turn_user') }}' + '/' + turnUserId,
@@ -310,22 +372,24 @@ function changeSelectTurn(obj)
                 $("#date_created_at").html(d.data['info']['date_created_at']);
                 $("#user_close_name").html(d.data['info']['user_close_name']);
                 $("#date_out").html(d.data['info']['date_out']);
-                $("#time_created_at").html(d.data['info']['time_created_at']);
-                $("#money_withdrawn").html("$"+d.data['info']['money_withdrawn']);
-                $("#money_left").html("$"+d.data['info']['money_left']);
-                
-                $("#money_open_box").html("$"+d.data['detail']['money_open_box']);
-                $("#sales_membership").html("$"+d.data['detail']['sales_membership']);
-                $("#sales_lockers").html("$"+d.data['detail']['sales_lockers']);
-                $("#sales_products").html("$"+d.data['detail']['sales_products']);
-                $("#sales_visits").html("$"+d.data['detail']['sales_visits']);
-                $("#total_sales").html("$"+d.data['detail']['total_sales']);
-                $("#debits_credits").html("$"+d.data['detail']['debits_credits']);
-                $("#buys").html("$"+d.data['detail']['buys']);
-                $("#total_money_received").html("$"+d.data['detail']['total_money_received']);
-                $("#adjust_box_income").html("$"+d.data['detail']['adjust_box_income']);
-                $("#adjust_box_outcome").html("$"+d.data['detail']['adjust_box_outcome']);      
-                $("#money_in_box").html("DINERO EN CAJA $".d.data['detail']['money_in_box']);  
+                if(d.data['info']['time_out'] != '00:00:00')
+                    $("#time_close").html(d.data['info']['time_out']);
+                else
+                    $("#time_close").html("");
+                $("#money_withdrawn").html("$"+parseFloat(d.data['info']['money_withdrawn']).toFixed(2));
+                $("#money_left").html("$"+parseFloat(d.data['info']['money_left']).toFixed(2));                
+                $("#money_open_box").html("$"+parseFloat(d.data['info']['money_left']));
+                $("#sales_membership").html("$"+parseFloat(d.data['detail']['sales_membership_cash']).toFixed(2));
+                $("#sales_membership_bank").html("$"+parseFloat(d.data['detail']['sales_membership_bank']).toFixed(2));
+                $("#payments_credit_nfc").html("$"+parseFloat(d.data['detail']['payments_nfc']).toFixed(2));
+                $("#sales_products").html("$"+parseFloat(d.data['detail']['incomes_cash']).toFixed(2));
+                $("#payments_bank").html("$"+parseFloat(d.data['detail']['incomes_bank']).toFixed(2));
+                $("#sales_visits_cash").html("$"+parseFloat(d.data['detail']['sales_visits_cash']).toFixed(2));
+                $("#sales_visits_bank").html("$"+parseFloat(d.data['detail']['sales_visits_bank']).toFixed(2));
+                $("#total_sales").html("$"+parseFloat(d.data['detail']['total_sales']).toFixed(2));
+                $("#buys").html("$"+parseFloat(d.data['detail']['buys']).toFixed(2));     
+                $("#money_in_box").html("$"+parseFloat(d.data['detail']['money_in_box']).toFixed(2));  
+                $("#money_in_box").load();
             }
             else{
                 alert("fail");
@@ -336,6 +400,26 @@ function changeSelectTurn(obj)
     ('#options').load();
     ('#info').load();
     ('#detail').load();
+    }else{
+        $("#user_admin_name").html("");
+        $("#date_created_at").html("");
+        $("#user_close_name").html("");
+        $("#date_out").html("");
+        $("#time_created_at").html("");
+        $("#money_withdrawn").html("");
+        $("#money_left").html("");
+        $("#money_open_box").html("");
+        $("#sales_membership").html("");
+        $("#sales_products").html("");
+        $("#sales_visits_cash").html("");
+        $("#sales_visits_bank").html("");
+        $("#total_sales").html("");
+        $("#payments_bank").html("");
+        $("#buys").html("");     
+        $("#money_in_box").html("");  
+	$("#sales_membership_bank").html("");        
+	$("#payments_credit_nfc").html("");
+    }
 }
          
 </script>

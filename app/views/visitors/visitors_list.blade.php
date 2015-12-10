@@ -38,9 +38,8 @@
         <table class="table table-striped table-bordered table-hover" id="dataTables-example">
             <thead>
                 <tr>
-                <th>Nombre</th>
-                <th>Apellido Paterno</th>
-                <th>Apellido Materno</th>
+                <th style="width: 50px">Id</th>
+                <th>Nombre Completo</th>
                 <th>Costo</th>
                 <th>Forma de pago</th>
                 <th>Referencia de pago</th>
@@ -53,14 +52,13 @@
                 @if(isset($visitors))
                     @foreach($visitors as $visitor)
                     <tr class="odd gradeX">
-                        <td>{{$visitor->first_name}}</td>
-                        <td>{{$visitor->last_name}}</td>
-                        <td>{{$visitor->second_last_name}}</td>                                                
-                        <td class="center">${{$visitor->amount}}</td>
-                        <td class="center">{{$visitor->method_payment}}</td>
-                        <td class="center">{{$visitor->reference_payment}}</td>
-                        <td class="center">{{$visitor->created_at}}</td>
-                        <td class="center">{{$visitor->user_name}}</td>
+                        <td>{{$visitor->id}}</td>
+                        <td>{{$visitor->first_name}}&nbsp;{{$visitor->last_name}}&nbsp;{{$visitor->second_last_name}}</td>                                          
+                        <td>${{$visitor->amount}}</td>
+                        <td>{{$visitor->method_payment}}</td>
+                        <td>{{$visitor->reference_payment}}</td>
+                        <td>{{$visitor->created_at}}</td>
+                        <td>{{$visitor->user_name}}</td>
                         <td style="text-align: center; vertical-align: middle; ">
                             <span class="visitor-id" style="display: none">
                                 {{$visitor->id}}
@@ -69,9 +67,11 @@
                                data-toggle="modal" style="cursor:pointer">
                                 <i class="glyphicon glyphicon-edit"></i>
                             </a> 
-                            <a class="delete_visitor"  title="Remove" style="cursor:pointer">
+                            @if(Auth::user()->type == 1)                                    
+                            <a role="button" class="delete_visitor"  title="Remove">
                                 <i class="glyphicon glyphicon-remove"></i>
                             </a>
+                            @endif
                         </td>
                     </tr>                    
                     @endforeach
@@ -95,31 +95,34 @@
         <form role="form">
             <div id="visitor_id_edit" style="display: none"></div>
             <div class="form-group">
-                <label for="name">Nombre</label>
+                <label for="name">* Nombre</label>
                 <input id="first_name" type="text" class="form-control" id="name" 
                        placeholder="Nombre">
             </div>
             <div class="form-group">
-                <label for="apellido">Apellido paterno</label>
+                <label for="apellido">* Apellido paterno</label>
                 <input id="last_name" type="text" class="form-control" id="apellido" 
                        placeholder="Apellido paterno">
             </div>
             <div class="form-group">
                 <label for="costo">Apellido materno</label>
                 <input id="second_last_name" type="text" class="form-control" id="costo" 
-                       placeholder="Costo">
+                       placeholder="Apellido materno">
             </div>
             <div class="form-group">
-                <label for="costo">Costo por clase o visita</label>
+                <label for="costo">* Costo por visita</label>
                 <input id="amount" type="text" class="form-control" id="costo" 
                        placeholder="Costo">
             </div>            
             <div class="form-group">
-                <label >Forma de pago</label>
+                <label >* Forma de pago</label>
                 <select id="method_payment" class="form-control">
-                    <option >Efectivo</option>
-                    <option >Tarjeta</option>
-                    <option >Cheque</option>
+                    <option>Efectivo</option>
+                    <option>Tarjeta</option>
+                    <option>Depósito</option>
+                    <option>Transferencia</option>
+                    <option>Cheque</option>
+                    <option>Otro</option>
                 </select>
             </div>
             <div class="form-group">
@@ -129,6 +132,7 @@
             </div>
         </form>
         </div>
+	<div id="errors_save_visitor"></div>
         <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button> 
             <button id="save_visitor" type="button" class="btn btn-primary">Guardar</button>
@@ -148,23 +152,27 @@ $(document).ready(function() {
 $('#dataTables-example').DataTable({
     paging: true,
     searching: true,    
-    responsive: true
+    responsive: true,
+    "aaSorting": [[0, 'desc']],
+    "language": {"url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json"}
 });    
     
 $('#add_visitor').on('click', function() {
     $('#header_modal').html("Agregar vista");
     $('#visitor_id_edit').html("0");
+$('#errors_save_visitor').html("");
+$('#errors_save_visitor').load();
     $('#visitor_modal').modal();
 });
 
 $('#save_visitor').on('click', function() {    
     var data = {            
-        first_name :$("#first_name").val(),
-        last_name :$("#last_name").val(),
-        second_last_name:$("#second_last_name").val(),
-        method_payment :$("#method_payment").val(),
-        amount : $('#amount').val(),
-        reference_payment :$("#reference_payment").val()                       
+        nombre :$("#first_name").val(),
+        apellido_paterno :$("#last_name").val(),
+        apellido_materno :$("#second_last_name").val(),
+        metodo_de_pago :$("#method_payment").val(),
+        cantidad : $('#amount').val(),
+        referencia_de_pago :$("#reference_payment").val()                       
     }, 
     id = $('#visitor_id_edit').text();
     $.ajax({
@@ -173,27 +181,54 @@ $('#save_visitor').on('click', function() {
         data: data,
         success: function(data, textStatus, jqXHR) {     
             if(data.success == true){
+                alert('¡Visita guardada!'); 
                 window.location.reload();
             }
-            else{alert(data.errors);}                        
+            else{
+                if(data.errors == 'NO TURN'){
+                    if (!confirm('¿No hay turno habilitado. ¿Desea crear un nuevo turno?'))
+                        return false;   
+                    $.ajax({
+                        type: "POST",
+                        url: '{{ URL::to('/turn_user/create') }}',
+                        success: function(d, textStatus, jqXHR) {  
+                            if(d.success == true){   
+                                alert('¡Turno Agregado!');     
+                                window.location.reload();
+                            }
+                            else{
+				$('#errors_save_visitor').html("<div class='alert alert-danger'>"+data.errors+"</div>");
+				$('#errors_save_visitor').load();
+				}                        
+                        },
+                        dataType: 'json'
+                    });                         
+                }else{
+                    var txt = "Errores de validación : \n";                
+                    for (i = 0; i < data.errors.length; i++)
+                        txt = txt+'\n'+data.errors[i];
+			$('#errors_save_visitor').html("<div class='alert alert-danger'>"+txt+"</div>");
+			$('#errors_save_visitor').load();             
+                }                
+            }                        
         },
         dataType: 'json'
-    });              
-    window.location.reload();      
+    });                  
 });
 
 $('.delete_visitor').on('click', function() {
-    if (!confirm('Desea borrar el registro?')) {
+    if (!confirm('¿Desea borrar la visita?')) {
         return false;
     }
     var o = $(this),
     id = o.parents('td:first').find('span.visitor-id').text(); 
     $.ajax({
-        type: "DELETE",
-        url: '{{ URL::to('/visitor') }}' + '/' + id,
+        type: "POST",
+        url: '{{ URL::to('/visitor/delete') }}' + '/' + id,
         success: function(data, textStatus, jqXHR) {                        
             if(data.success == true){
-                window.location.reload();
+                alert("¡Visita eliminada!");
+                window.location.replace("/crm_gym/public/visitors_list");
             }
             else{alert(data.errors);}                        
         },
@@ -228,14 +263,13 @@ function fillModalVisitor(id)
     });    
 }
 
-$('#show_between_dates').on('click', function() {
-    //alert("ok");
+$('#show_between_dates').on('click', function() {   
     var init = document.getElementById("date_init")
     var end = document.getElementById("date_end")
     var params;
     params = init.value+"+"+end.value;
 
-    window.location.replace("http://axeso_gym.dev/visitors_list/"+params);
+    window.location.replace("visitors_list/"+params);
 });  
 
 });

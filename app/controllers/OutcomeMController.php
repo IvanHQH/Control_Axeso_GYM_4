@@ -33,45 +33,56 @@ class OutcomeMController extends BaseController{
             $end_dt_aux = $aux[0] . "-" . $aux[1] . "-" .$aux[2];            
             
             $init_dt .= " 00:00:00";
-            $end_dt .= " 00:00:00";              
-            $outcomes = DB::select("call outcomes('".$init_dt."','".$end_dt."')");  
+            $end_dt .= " 23:59:59";              
+            $outcomes = DB::select("call outcomes('".$init_dt."','".$end_dt."',".Auth::user()->branch_office_id.")");  
         } catch (Exception $e) {
-            $outcomes = DB::select("call outcomes('0000-01-01 00:00:00','3000-01-01 00:00:00')");
+            $outcomes = DB::select("call outcomes('0000-01-01 00:00:00','3000-01-01 00:00:00',".Auth::user()->branch_office_id.")");
         }
         
         return View::make('cashbox.outcome',['outcomes'=>$outcomes,'date_init'=>$init_dt_aux,'date_end'=>$end_dt_aux]);        
     }       
     
-    public function store($outcomeId)
+    public function store()
     {        
+        $turnId = TurnUser::currentTurnId();
+        if($turnId == null)
+            return Response::json(array('success'=>false,'errors'=>'NO TURN'));                             
+
         $outcomem = new OutcomeM();        
         $input = Input::All();                
-        if($outcomeId != 0){
-            $outcomed = OutcomeD::find($outcomeId);
-            if($outcomed == null)
-                return Response::json(array('success' => false,
-                    'errors'=>'outcome not found'));                 
-        }else{                          
-            $outcomem->turn_users_id = TurnUser::turnUserOpen(Auth::user()->branch_office_id)->id;
-            $outcomem->total = $input['amount'];
-            $outcomem->save();  
-            
-            $outcomed = new OutcomeD(); 
-            $outcomed->outcome_ms_id = $outcomem->id;
-        }
-        //DB::transaction(function($input) use ($input) {              
-            
-        $outcomed->description = $input['description'];
-        $outcomed->subtotal = $input['amount'];
-        $outcomed->save();        
+                       
+        $outcomem->turn_users_id = TurnUser::currentTurnId();
+        $outcomem->total = $input['total'];
+        $outcomem->created_at = MethodsConstants::dateTimeMexicoCenter(date("Y-m-d H:i:s"));
+        $outcomem->save();  
+        try{
+            if (Input::has('products')) {
+                $prods = Input::get('products');
+                if (!is_array($prods)) {
+                    $prods = array($prods);
+                }
+                foreach ($prods as $e) {
+                    $outcomed = new OutcomeD(); 
+                    $prod = Product::where('code',$e[0])->first();
+                    $prod->stock = $prod->stock + intval($e[1]);
+                    $prod->save();              
+                    $outcomed->product_id = $prod->id;
+                    $outcomed->description = $prod->name;
+                    $outcomed->quantity = intval($e[1]);      
+                    $outcomed->subtotal = intval($e[1])*$prod->price;
+                    $outcomed->created_at = MethodsConstants::dateTimeMexicoCenter(date("Y-m-d H:i:s"));
+                    $outcomed->outcome_ms_id = $outcomem->id; 
+                    $outcomed->save();        
+                }
+            }        
+            return Response::json(array('success'=>true));
+        }catch(Exception $e){
+            return Response::json(array('success'=>false,'errors'=>$e->getMessage()));
+        }        
 
         return Response::json(array(
                 'success' => true                   
-        ));               
-        /*});     
-        return Response::json(array(
-                'success' => false,'errors'=>'error'                   
-        ));    */        
+        ));                 
     }    	
     
     public function get($outcomeId)

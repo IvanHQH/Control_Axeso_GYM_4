@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Login</title>
+    <title>HQH GYM</title>
 
     {{-- Bootstrap --}}
     {{ HTML::style('assets/css/bootstrap.min.css', array('media' => 'screen')) }}
@@ -39,35 +39,35 @@
 
 <body>
     <div class="container">
-        <div class="row">
-            <div class="col-md-4 col-md-offset-4">
-                <div class="login-panel panel panel-default">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">Por favor iniciar sesión</h3>
-                    </div>
-                    <div class="panel-body">
-                        {{Form::open(array('url' => 'post_login','method'=>'post'))}}
-                        <fieldset>
-                            <div class="form-group">
-                                <input id="login-username" type="text" class="form-control" 
-                                       name="nick_name" value="ivan" placeholder="Nombre">                                        
-                            </div>
-                            <div class="form-group">
-                                <input id="login-password" type="password" class="form-control" 
-                                       name="password" placeholder="Contraseña" value="123" >
-                            </div>
-                            <div class="form-group">
-                                <input id="nameClient" type="text" class="form-control" 
-                                       name="name_client" placeholder="Nombre Cliente" value="le parc gym lomas" >                                              
-                            </div>                                                                                                    
-                            <button id="btn-login" type="btn btn-success" type="submit"
-                                class="btn btn-lg btn-success btn-block">Iniciar Sesión</button>       
-                        </fieldset>    
-                        {{ Form::close() }}
-                    </div>
+    <div class="row">
+    <div class="col-md-4 col-md-offset-4">
+        <div class="login-panel panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Por favor inicia sesión</h3>
+            </div>
+            <div class="panel-body">
+            {{Form::open(array('url' => 'post_login','method'=>'post'))}}
+            <fieldset>
+                <div class="form-group">
+                    <input id="login-username" type="text" class="form-control" 
+                           name="nick_name" value="" placeholder="Nombre">                                        
                 </div>
+                <div class="form-group">
+                    <input id="login-password" type="password" class="form-control" 
+                           name="password" placeholder="Contraseña" value="" >
+                </div>
+                <div class="form-group">
+                    <input id="nameClient" type="text" class="form-control" 
+                           name="name_client" placeholder="Nombre Cliente" value="" >
+                </div>                                                                                                    
+                <button id="btn-login" type="btn btn-success" type="submit"
+                    class="btn btn-lg btn-success btn-block">Iniciar Sesión</button>       
+            </fieldset>    
+            {{ Form::close() }}
             </div>
         </div>
+    </div>
+    </div>
     </div>
 
     {{-- Include all compiled plugins (below), or include individual files as needed --}}

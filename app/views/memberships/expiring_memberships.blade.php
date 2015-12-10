@@ -4,7 +4,7 @@
 <div id="page-wrapper">
 <div class="row">
     <div class="col-lg-12">
-        <h1 class="page-header">Socios con membresías a punto de expirar</h1>
+        <h1 class="page-header">Membresías de socios a expirar</h1>
     </div>
     <!-- /.col-lg-12 -->
 </div>
@@ -13,6 +13,23 @@
 <div class="row">
     <div class="col-lg-12">
         <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-md-3">
+                        <p>Fecha inicial</p>
+                        <input type="date" class="form-control" id="date_init" value="{{$date_init}}">
+                    </div>
+                    <div class="col-md-3">
+                        <p>Fecha final</p>
+                        <input type="date" class="form-control" id="date_end" value="{{$date_end}}">
+                    </div>                    
+                    <p>&nbsp;</p>
+                    <div class="col-md-2">
+                        <button id="show_after" type="button" 
+                            class="btn btn-outline btn-primary">Mostrar</button>
+                    </div>
+                </div>                
+            </div>
             <!-- panel-body -->
             <div class="panel-body">
                 <!-- datatable-wrapper -->
@@ -27,10 +44,8 @@
                         <thead>
                             <!-- headers-columns -->
                             <tr role="row">
-                                <th>Nombre</th>
-                                <th>Apellido Paterno</th>
-                                <th>Apellido Materno</th>
-                                <th>Membresia ID</th>
+                                <th>Id</th>
+                                <th>Nombre Completo</th>
                                 <th>Detalle Membresía</th>
                                 <th>Comienza</th>          
                                 <th>Termina</th>                                   
@@ -38,29 +53,17 @@
                             <!-- /.headers-columns -->
                         </thead>
                         <tbody>               
-                        @for($i = 0; $i < 6 ;$i++)                             
-                            @if($i%2==0)
+                            @if(isset($experingMemberships))
+                            @foreach($experingMemberships as $aMemShip)
                             <tr class="gradeA odd" role="row">
-                                <td class="sorting_1">Antonio</td>
-                                <td>López</td>
-                                <td>Rodríguez</td>
-                                <td class="center">8407</td>
-                                <td>Mensualidad Estudiante</td>
-                                <td>29/May/2015</td>
-                                <td>29/Jul/2015</td>
-                            </tr>                             
-                            @else
-                            <tr class="gradeA odd" role="row">
-                                <td class="sorting_1">José</td>
-                                <td>Sanchéz</td>
-                                <td>Pérez</td>
-                                <td class="center">8410</td>
-                                <td>Mensualidad General</td>
-                                <td>12/Jul/2015</td>
-                                <td>12/Sep/2015</td>
-                            </tr>  
-                            @endif   
-                        @endfor    
+                                <td>{{$aMemShip->membership_id}}</td>
+                                <td>{{$aMemShip->first_name}}&nbsp;{{$aMemShip->last_name}}&nbsp;{{$aMemShip->second_last_name}}</td>
+                                <td>{{$aMemShip->name_membership_type}}</td>
+                                <td>{{$aMemShip->start_period}}</td>
+                                <td>{{$aMemShip->end_period}}</td>
+                            </tr> 
+                            @endforeach                            
+                            @endif
                         </tbody>
                     </table></div>
                         </div>
@@ -83,8 +86,18 @@ $(document).ready(function() {
 $('#dataTables-example').dataTable( {
     paging: true,
     searching: true,    
-    responsive: true
-} ); 
+    responsive: true,
+    "aaSorting": [[0, 'desc']],
+    "language": {"url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json"}
+} );
+
+$('#show_after').on('click', function() {    
+    var init = document.getElementById("date_init")
+    var end = document.getElementById("date_end")
+    var params;
+    params = init.value+"+"+end.value;
+    window.location.replace("/crm_gym/public/expiring_memberships/"+params);
+});  
 
 });              
     

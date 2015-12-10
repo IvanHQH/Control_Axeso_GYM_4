@@ -18,13 +18,13 @@
                     <div class="col-md-4">
                       <div class="input-group">   
                         <label for="date_ini">Fecha Inicial</label>
-                            <input type="date" class="form-control" id="date_init">                                                                 
+                            <input type="date" class="form-control" id="date_init" value="{{$date_init}}">                                                                 
                       </div><!-- /input-group -->
                     </div><!-- /.col-lg-6 -->    
                     <div class="col-md-4">
                       <div class="input-group">   
                         <label for="date_end">Fecha Final</label>
-                            <input type="date" class="form-control" id="date_end">   
+                            <input type="date" class="form-control" id="date_end" value="{{$date_end}}">   
                       </div><!-- /input-group -->
                     </div><!-- /.col-lg-6 --> 
                     <div class="col-lg-4">
@@ -52,13 +52,14 @@
                         <thead>
                             <!-- headers-columns -->
                             <tr role="row">
+                                <th>Id</th>
                                 <th>Nombre Socio</th>
                                 <th>Concepto de Pago</th>
                                 <th>Descripción</th>
                                 <th>Cantidad</th>
                                 <th>Forma de pago</th>
                                 <th>Fecha/Hora</th>           
-                                <th></th>                                  
+                                <th style="width: 70px"></th>                                   
                             </tr>
                             <!-- /.headers-columns -->
                         </thead>
@@ -66,9 +67,10 @@
                         @if(isset($payments))
                         @foreach($payments as $payment) 
                             <tr class="gradeA odd" role="row">
-                                <td class="sorting_1">{{$payment->middle_name}}</td>
+                                <td>{{$payment->payment_id}}</td>
+                                <td>{{$payment->middle_name}}</td>
                                 <td>{{$payment->concept}}</td>
-                                <td class="center">{{$payment->description}}</td>
+                                <td>{{$payment->description}}</td>
                                 <td>{{$payment->amount}}</td>
                                 <td>{{$payment->method_payment}}</td>
                                 <td>{{$payment->created_at}}</td>
@@ -76,11 +78,11 @@
                                     <span class="payment-id" style="display: none">
                                         {{$payment->payment_id}}
                                     </span>                                      
-                                    <a class="edit_membership_paymet" class="edit ml10" href="javascript:void(0)" title="Editar">
+                                    <a class="edit_membership_paymet" class="edit ml10" style="cursor: pointer" title="Editar">
                                         <i class="glyphicon glyphicon-edit">                                    
                                         </i>
                                     </a>
-                                    <a class="delete_membership_paymet" class="remove ml10" href="javascript:void(0)" title="Eliminar">
+                                    <a class="delete_membership_paymet" class="remove ml10" style="cursor: pointer" title="Eliminar">
                                         <i class="glyphicon glyphicon-remove">                                    
                                         </i>
                                     </a>                                 
@@ -155,6 +157,8 @@
                                     <option>Depósito</option>
                                     <option>Transferencia</option>
                                     <option>Efectivo</option>
+                                    <option>Cheque</option>
+                                    <option>Otro</option>
                                 </select>                            
                             </div>                             
                         </div>                        
@@ -182,7 +186,9 @@ $(document).ready(function() {
 $('#dataTables-example').dataTable( {
     paging: true,
     searching: true,    
-    responsive: true
+    responsive: true,
+    "aaSorting": [[0, 'desc']],
+    "language": {"url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json"}
 } ); 
 
 $('#show_between_dates').on('click', function() {
@@ -190,8 +196,7 @@ $('#show_between_dates').on('click', function() {
     var end = document.getElementById("date_end")
     var params;
     params = init.value+"+"+end.value;
-
-    window.location.replace("http://axeso_gym.dev/memberships_paymets/"+params);
+    window.location.replace("/crm_gym/public/memberships_paymets/"+params);
 });
 
 /*
@@ -266,11 +271,12 @@ $('.delete_membership_paymet').on('click', function(e) {
     var o = $(this),
     id = o.parents('td:first').find('span.payment-id').text();  
     $.ajax({
-        type: "DELETE",
-        url: '{{ URL::to('/payment') }}' + '/' + id,
+        type: "POST",
+        url: '{{ URL::to('/payment/delete') }}' + '/' + id,
         success: function(data, textStatus, jqXHR) {                        
             if(data.success == true){
-                window.location.reload();
+                alert("¡Pago eliminado!");
+                window.location.replace("/crm_gym/public/memberships_paymets");
             }
             else{alert(data.errors);}                        
         },

@@ -28,9 +28,8 @@
                         <thead>
                             <!-- headers-columns -->
                             <tr role="row">
-                                <th>Nombre</th>
-                                <th>Apellido Paterno</th>
-                                <th>Apellido Materno</th>
+                                <th>Id</th>
+                                <th>Nombre Completo</th>
                                 <th>Direcci&oacute;n</th>
                                 <th>Colonia</th>          
                                 <th>Ciudad</th>            
@@ -43,9 +42,8 @@
                             @if(isset($inactiveMemberships))
                             @foreach($inactiveMemberships as $iMemShip)
                             <tr class="gradeA odd" role="row">
-                                <td class="sorting_1">{{$iMemShip->first_name}}</td>
-                                <td>{{$iMemShip->last_name}}</td>
-                                <td>{{$iMemShip->second_last_name}}</td>
+                                <td>{{$iMemShip->membership_id}}</td>
+                                <td>{{$iMemShip->first_name}}&nbsp;{{$iMemShip->last_name}}&nbsp;{{$iMemShip->second_last_name}}</td>
                                 <td>{{$iMemShip->address}}</td>
                                 <td>{{$iMemShip->neighborhood}}</td>
                                 <td>{{$iMemShip->city}}</td>
@@ -77,7 +75,9 @@ $(document).ready(function() {
 $('#dataTables-example').dataTable( {
     paging: true,
     searching: true,    
-    responsive: true
+    responsive: true,
+    "aaSorting": [[0, 'desc']],
+    "language": {"url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json"}
 } ); 
 
 });              

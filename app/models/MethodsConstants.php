@@ -12,7 +12,7 @@ class MethodsConstants{
     public static function dateTimeMexicoCenter($date)
     {
 	$datetime = new DateTime($date);
-	$datetime->modify('-5 hour');
+	$datetime->modify('+1hour');
 	return $datetime->format('Y-m-d H:i:s');        
     }
         

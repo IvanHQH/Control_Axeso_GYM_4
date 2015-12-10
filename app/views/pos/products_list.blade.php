@@ -4,7 +4,7 @@
 <div id="page-wrapper">
 <div class="row">
     <div class="col-lg-12">
-        <h1 class="page-header">Tipos de membres&iacute;a</h1>
+        <h1 class="page-header">Productos</h1>
     </div>
     <!-- /.col-lg-12 -->
 </div>
@@ -19,7 +19,7 @@
                 <div class="row">
                     <div class="col-sm-4">                            
                         <button type="button" class="btn btn-outline btn-primary" 
-                            id="add_membership_type" data-toggle="modal">                                   
+                            id="add_product" data-toggle="modal">                                   
                         Agregar
                         </button>    
                     </div>
@@ -41,11 +41,13 @@
                             <!-- headers-columns -->
                             <tr role="row">
                                 <th style="width: 40px;">Id</th>
+                                <th style="width: 110px;">C&oacute;digo</th>                                  
                                 <th style="width: 172px;">Nombre</th>
-                                <th style="width: 204px;">Fecha Creada</th>
-                                <th style="width: 185px;">Fecha limite de entrega</th>
+                                <th style="width: 185px;">Drescripci&oacute;n</th>
                                 <th style="width: 149px;">Precio</th>
-                                <th style="width: 110px;">Duraci&oacute;n</th>
+                                <th style="width: 110px;">Costo</th>                                   
+                                <th style="width: 204px;">Fecha Creado</th> 
+                                <th style="width: 110px;">Saldo</th> 
                                 @if(Auth::user()->type == 1)
                                 <th style="width: 110px;"></th>          
                                 @endif
@@ -53,27 +55,31 @@
                             <!-- /.headers-columns -->
                         </thead>
                         <tbody>
-                        @if(isset($membershipTypes))       
-                        @foreach($membershipTypes as $memshipType) 
+                        @if(isset($products))       
+                        @foreach($products as $product) 
                             <tr class="gradeA odd" role="row">
-                                <td>{{$memshipType->id}}</td>
-                                <td>{{$memshipType->name}}</td>
-                                <td>{{$memshipType->created_at}}</td>
-                                <td>{{$memshipType->available_until}}</td>
-                                <td>${{$memshipType->price}}</td>
-                                <td>{{$memshipType->duration}} días</td>
+                                <td>{{$product->id}}</td>
+                                <td>{{$product->code}}</td>                                   
+                                <td>{{$product->name}}</td>
+                                <td>{{$product->description}}</td>    
+                                <td>${{$product->price}}</td>                            
+                                <td>${{$product->cost}}</td>                                                             
+                                <td>{{$product->created_at}}</td> 
+                                @if($product->type == 'Producto')                               
+                                    <td>{{$product->stock}}</td> 
+                                @else
+                                    <td></td>
+                                @endif                                
                                 @if(Auth::user()->type == 1)
                                 <td style="text-align: center; vertical-align: middle; ">                                    
-                                    <span class="membership-type-id" style="display:none">
-                                        {{$memshipType->id}}
+                                    <span class="product-id" style="display:none">
+                                        {{$product->id}}
                                     </span>                                              
-                                    <a class="edit_membershiptype" href="javascript:void(0)" title="Editar">
-                                        <i class="glyphicon glyphicon-edit">                                    
-                                        </i>
+                                    <a class="edit_product" role="button" title="Editar">
+                                        <i class="glyphicon glyphicon-edit"></i>
                                     </a>
-                                    <a class="delete_membershiptype" href="javascript:void(0)" title="Eliminar">
-                                        <i class="glyphicon glyphicon-remove">                                    
-                                        </i>
+                                    <a class="delete_product" role="button" title="Eliminar">
+                                        <i class="glyphicon glyphicon-remove"></i>
                                     </a>        
                                 </td>           
                                 @endif
@@ -95,7 +101,7 @@
 <!-- /.row-content -->        
 </div>
 
-<div class="modal fade" id="modal-membershiptype" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="modal-product" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">                       
             <div class="modal-header">
@@ -103,45 +109,57 @@
                         ×
                 </button>
                 <h4 class="modal-title" id="myModalLabel">
-                        Agregar tipo de membres&iacute;a
+                    Producto
                 </h4>
             </div>
             <div class="modal-body">
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-md-12">
-                            <div id="membership_type_id_edit" style="display: none"></div>                            
+                            <div id="product_id" style="display: none"></div>       
+                            <div class="form-group">
+                                <label>* C&oacute;digo</label>
+                                <input id="product_code" class="form-control">                                
+                            </div>                              
                             <div class="form-group">
                                 <label>* Nombre</label>
-                                <input id="membership_type_name" class="form-control">                                
+                                <input id="product_name" class="form-control">                                
                             </div>     
                             <div class="form-group">    
-                                <label>* Fecha limte de entrega</label>
-                                <input id="membership_type_available_unitl" type="date" class="form-control">                                
+                                <label> Decripci&oacute;n</label>
+                                <input id="product_description" class="form-control">                                
                             </div>         
                             <div class="form-group">                                 
+                                <label>* Existencia</label>
+                                <input id="product_stock" class="form-control"> 
+                            </div>
+
+                            <div class="form-group">                                 
+                            <label>* Tipo</label>
+                                <select id="product_type" name="sexo" class="form-control">
+                                    <option>Producto</option>
+                                    <option>Servicio</option>
+                                </select>
+                            </div>            
+
+                            <div class="form-group">                                 
                                 <label>* Precio</label>
-                                <input id="membership_type_price" class="form-control"> 
+                                <input id="product_price" class="form-control"> 
                             </div>     
                             <div class="form-group">                                 
-                                <label>* Duración (días)</label>
-                                <input id="membership_type_duration" class="form-control">                                 
-                            </div>     
-                            <!--div class="form-group">                             
-                                <label>
-                                    <input id="membership_type_available" type="checkbox" value="1">  Disponible
-                                </label>
-                            </div-->                                  
+                                <label>* Costo</label>
+                                <input id="product_cost" class="form-control">                                 
+                            </div>                                    
                         </div>                        
                     </div>
                 </div>
                 </div>
-		<div id="errors_save_membershiptype"></div>
+		<div id="errors_save_product"></div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">
                             Cerrar
                     </button> 
-                    <button id="save_membership_type" type="button" class="btn btn-primary">
+                    <button id="save_product" type="button" class="btn btn-primary">
                             Guardar
                     </button>
                 </div>
@@ -164,44 +182,44 @@ $('#dataTables-example').DataTable({
 
 /*
  |------------------------------------------------------------------------
- | Add MembershipTypes 
+ | Add Product
  |------------------------------------------------------------------------        
 */  
 
-$('#add_membership_type').on('click',function(e){    
-    $('#modal-membershiptype').modal();
+$('#add_product').on('click',function(e){    
+    $('#modal-product').modal();
     $('input').val('');
-$('#errors_save_membershiptype').html("");
-$('#errors_save_membershiptype').load();
-    $('#membership_type_id_edit').html("0");
+$('#errors_save_product').html("");
+$('#errors_save_product').load();
+    $('#product_id').html("0");
 });
 
-$('#save_membership_type').on('click',function(e){
-    var available_unitl = document.getElementById("membership_type_available_unitl");
+$('#save_product').on('click',function(e){
     var data = {
-        nombre : $("#membership_type_name").val(),                                                     
-        habilitada_hasta : 0,
-        precio : $("#membership_type_price").val(),
-        duracion : $("#membership_type_duration").val()
+        codigo : $("#product_code").val(),      
+        nombre : $("#product_name").val(),    
+        descripcion : $("#product_description").val(),        
+        precio : $("#product_price").val(),
+        costo : $("#product_cost").val(),
+        tipo : $("#product_type").val(),
+        saldo : $("#product_stock").val()
     },     
-    id = $('#membership_type_id_edit').text();
-    data.habilitada_hasta = available_unitl.value;
+    id = $('#product_id').text();
     $.ajax({
         type: "POST",
-        url: '{{ URL::to('/membership_type') }}' + (typeof id !== 'undefined'?('/' + id):''),
+        url: '{{ URL::to('/product') }}' + (typeof id !== 'undefined'?('/' + id):''),
         data: data,
         success: function(data, textStatus, jqXHR) {  
             if(data.success == true){
-                alert("Tipo de membresia guardada");
+                alert("¡Producto guardado!");
                 window.location.reload();
             }
             else{
                 var txt = "Errores de validación : \n";                
                 for (i = 0; i < data.errors.length; i++)
                     txt = txt+'\n'+data.errors[i];
-
-			$('#errors_save_membershiptype').html("<div class='alert alert-danger'>"+txt+"</div>");
-			$('#errors_save_membershiptype').load();	                      
+		$('#errors_save_product').html("<div class='alert alert-danger'>"+txt+"</div>");
+		$('#errors_save_product').load();		                
             }                        
         },
         dataType: 'json'
@@ -210,52 +228,54 @@ $('#save_membership_type').on('click',function(e){
 
 /*
  |------------------------------------------------------------------------
- | Edit MembershipTypes 
+ | Edit Product
  |------------------------------------------------------------------------        
 */  
 
-$('.edit_membershiptype').on('click', function(e) {
-    //alert('ok');
+$('.edit_product').on('click', function(e) {
     var o = $(this),  
-    id = o.parents('td:first').find('span.membership-type-id').text();    
+    id = o.parents('td:first').find('span.product-id').text();    
     $('input').val('');
-    $('#membership_type_id_edit').html(id);        
+    $('#product_id').html(id);        
     fillModal(id);
-    $('#modal-membershiptype').modal();
+    $('#modal-product').modal();
 });        
 
 function fillModal(id){
     $.ajax({
         type : 'GET',
-        url : '{{URL::to('membership_type')}}'+'/'+id,
+        url : '{{URL::to('product')}}'+'/'+id,
         datatype: 'json',
         success:function(d){
-            $("#membership_type_name").val(d.membership_type.name);                                                        
-            $("#membership_type_price").val(d.membership_type.price);
-            $("#membership_type_duration").val(d.membership_type.duration);
-            $("#membership_type_available_unitl").val(d.membership_type.available_unitl);
+            $("#product_name").val(d.product.name);                                                        
+            $("#product_price").val(d.product.price);
+            $("#product_code").val(d.product.code);
+            $("#product_cost").val(d.product.cost);
+            $("#product_stock").val(d.product.stock);
+            $("#product_type").val(d.product.type);
+            $("#product_description").val(d.product.description);            
         },
     });
 }
 
 /*
  |------------------------------------------------------------------------
- | Delete MembershipTypes 
+ | Delete product
  |------------------------------------------------------------------------        
 */  
 
-$('.delete_membershiptype').on('click', function(e) {
-    if (!confirm('¿Desea borrar tipo de membresía?'))
+$('.delete_product').on('click', function(e) {
+    if (!confirm('¿Desea borrar producto?'))
             return false;
     var o = $(this),  
-    id = o.parents('td:first').find('span.membership-type-id').text(); 
+    id = o.parents('td:first').find('span.product-id').text(); 
     $.ajax({
         type : "POST",
-        url : '{{URL::to('/membership_type/delete')}}'+'/'+id,
+        url : '{{URL::to('/product/delete')}}'+'/'+id,
         success: function(data, textStatus, jqXHR){
             if(data.success == true){
-                alert("¡Tipo de membresía eliminada!");
-                window.location.replace("/crm_gym/public/membership_types_list");
+                alert("¡Producto eliminado!");
+                window.location.replace("/crm_gym/public/products_list");
             }
             else{alert(data.errors);}             
         },

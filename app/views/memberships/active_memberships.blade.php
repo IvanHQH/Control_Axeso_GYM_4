@@ -28,13 +28,12 @@
                         <thead>
                             <!-- headers-columns -->
                             <tr role="row">
-                                <th>Nombre</th>
-                                <th>Apellido Paterno</th>
-                                <th>Apellido Materno</th>
-                                <th>Membres&iacute;a ID</th>
+                                <th>Id</th>
+                                <th>Nombre Completo</th>
                                 <th>Detalle Membres&iacute;a</th>
-                                <th>Comienza</th>          
-                                <th>Termina</th>                                       
+                                <th>Compra</th>
+                                <th>Inicio período</th>
+                                <th>Fin Período</th>                                       
                             </tr>
                             <!-- /.headers-columns -->
                         </thead>
@@ -42,13 +41,12 @@
                             @if(isset($activeMemberships))
                             @foreach($activeMemberships as $aMemShip)
                             <tr class="gradeA odd" role="row">
-                                <td class="sorting_1">{{$aMemShip->first_name}}</td>
-                                <td>{{$aMemShip->last_name}}</td>
-                                <td>{{$aMemShip->second_last_name}}</td>
-                                <td class="center">{{$aMemShip->membership_id}}</td>
+                                <td>{{$aMemShip->membership_id}}</td>
+                                <td>{{$aMemShip->first_name}}&nbsp;{{$aMemShip->last_name}}&nbsp;{{$aMemShip->second_last_name}}</td>
                                 <td>{{$aMemShip->name_membership_type}}</td>
                                 <td>{{$aMemShip->start}}</td>
-                                <td>{{$aMemShip->end}}</td>
+                                <td>{{$aMemShip->start_period}}</td>
+                                <td>{{$aMemShip->end_period}}</td>
                             </tr> 
                             @endforeach                            
                             @endif
@@ -76,7 +74,9 @@ $(document).ready(function() {
 $('#dataTables-example').dataTable( {
     paging: true,
     searching: true,    
-    responsive: true
+    responsive: true,
+    "aaSorting": [[0, 'desc']],
+    "language": {"url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json"}
 } ); 
 
 });              

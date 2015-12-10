@@ -22,22 +22,18 @@
                          form-inline dt-bootstrap no-footer">
                         <div class="row">
                         <div class="col-sm-12">
-                            <table class="table table-striped table-bordered 
-                                table-hover dataTable no-footer" id="dataTables-example"
-                                role="grid" aria-describedby="dataTables-example_info">
+                        <table class="table table-striped table-bordered 
+                            table-hover dataTable no-footer" id="dataTables-example"
+                            role="grid" aria-describedby="dataTables-example_info">
                         <thead>
                             <!-- headers-columns -->
                             <tr role="row">
-                                <th>Nombre
-                                </th>
-                                <th>Fecha Creada
-                                </th>
-                                <th>Precio
-                                </th>
-                                <th>Duración
-                                </th>
-                                <th>Habilitada hasta
-                                </th>                                
+                                <th style="width: 50px">Id</th>
+                                <th>Nombre</th>
+                                <th>Fecha Creada</th>
+                                <th>Precio</th>
+                                <th>Duración</th>
+                                <th>Habilitada hasta</th>                                
                             </tr>
                             <!-- /.headers-columns -->
                         </thead>
@@ -45,16 +41,18 @@
                         @if(isset($membershipTypesAvailabes))       
                         @foreach($membershipTypesAvailabes as $memshipType) 
                             <tr class="gradeA odd" role="row">
-                                <td class="sorting_1">{{$memshipType->name}}</td>
+                                <td>{{$memshipType->id}}</td>
+                                <td>{{$memshipType->name}}</td>
                                 <td>{{$memshipType->created_at}}</td>
-                                <td class="center">{{$memshipType->price}}</td>
-                                <td class="center">{{$memshipType->duration}}</td>
+                                <td>${{$memshipType->price}}</td>
+                                <td>{{$memshipType->duration}} días</td>
                                 <td>{{$memshipType->available_until}}</td>
                             </tr>                                                
                         @endforeach
                         @endif
                         </tbody>
-                    </table></div>
+                        </table>
+                        </div>
                         </div>
                         </div>
                 </div>
@@ -76,7 +74,9 @@ $(document).ready(function() {
 $('#dataTables-example').dataTable( {
     paging: true,
     searching: true,    
-    responsive: true
+    responsive: true,
+    "aaSorting": [[0, 'desc']],
+    "language": {"url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json"}
 } ); 
 
 });              
