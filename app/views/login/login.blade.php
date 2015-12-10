@@ -43,7 +43,7 @@
             <div class="col-md-4 col-md-offset-4">
                 <div class="login-panel panel panel-default">
                     <div class="panel-heading">
-                        <h3 class="panel-title">Por favor inicia sesión</h3>
+                        <h3 class="panel-title">Por favor iniciar sesión</h3>
                     </div>
                     <div class="panel-body">
                         {{Form::open(array('url' => 'post_login','method'=>'post'))}}
